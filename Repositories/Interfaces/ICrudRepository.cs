@@ -11,7 +11,7 @@ namespace PharmacyApp.Repositories.Interfaces
         Task<IEnumerable<T>> GetAllAsync();
         Task<T> GetByIdAsync(int idEntityForSearch);
         Task<T> AddAsync(T entity);
-        Task<T> DeleteAsync(T entityForDelete);
-        Task UpdateAsync(T newEntity);
+        Task DeleteAsync(T entityForDelete);
+        Task<T> UpdateAsync(T newEntity);
     }
 }
