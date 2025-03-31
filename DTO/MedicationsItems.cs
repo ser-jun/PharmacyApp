@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,6 +20,6 @@ namespace PharmacyApp.DTO
         public string CategoryName { get; set; }
         public string CategoryDescription { get; set; }
         public string ReadyMadeStatus => IsReadyMade ? "Готовый" : "Требует приготовления";
-        public string PriceFormatted => Price?.ToString("C2") ?? "Цена не указана";
+        public string PriceFormatted => Price?.ToString("C2", CultureInfo.GetCultureInfo("be-BY")) ?? "Цена не указана";
     }
 }

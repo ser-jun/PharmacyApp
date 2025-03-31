@@ -19,16 +19,16 @@ using PharmacyApp.ViewModel;
 namespace PharmacyApp.View
 {
     /// <summary>
-    /// Логика взаимодействия для MedicationsWindow.xaml
+    /// Логика взаимодействия для AddMedicationWindow.xaml
     /// </summary>
-    public partial class MedicationsWindow : Window
+    public partial class AddMedicationWindow : Window
     {
-        public MedicationsWindow()
+        public AddMedicationWindow()
         {
             InitializeComponent();
             var context = new PharmacyDbContext();
-            IMedicationsRepository medicationsRepository = new MedicationsRepository(context);
-            DataContext = new MedicationsViewModel(medicationsRepository);
+            IMedicationFormAdd medicationForm = new MedicationsRepository(context);
+            DataContext = new AddMedicationWindowViewModel(medicationForm);
         }
     }
 }

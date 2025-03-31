@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,6 +21,13 @@ namespace PharmacyApp
             }
 
             newWindow.Show();
+
+        }
+        public static T OpenForm<T> () where T : Window, new()
+        {
+            var newWindow = new T();
+            newWindow.Show();
+            return newWindow;
         }
     }
 }

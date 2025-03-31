@@ -1,0 +1,35 @@
+﻿<Window x:Class="PharmacyApp.View.AddMedicationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Добавить лекарство" 
+        Height="400" 
+        Width="400"
+        WindowStartupLocation="CenterScreen">
+    <Grid Margin="10">
+        <StackPanel>
+            <TextBlock Text="Название:" Margin="0,0,0,5"/>
+            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
+
+            <TextBlock Text="Тип:" Margin="0,0,0,5"/>
+            <ComboBox ItemsSource="{Binding MedicationTypes}"
+                      SelectedItem="{Binding SelectedType}"
+                      DisplayMemberPath="Name"
+                      Margin="0,0,0,10"/>
+
+            <TextBlock Text="Категория:" Margin="0,0,0,5"/>
+            <ComboBox ItemsSource="{Binding MedicationCategories}"
+                      SelectedItem="{Binding SelectedCategory}"
+                      DisplayMemberPath="Name"
+                      Margin="0,0,0,10"/>
+
+            <CheckBox  IsChecked="{Binding IsReadyMade}"
+                      Content="Готовая форма"
+                      Margin="0,0,0,10"/>
+
+            <TextBlock Text="Цена:" Margin="0,0,0,5"/>
+            <TextBox Text="{Binding Price, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,20"/>
+
+            <Button Content="Добавить" Command="{Binding AddEntryCommand}" Width="100" HorizontalAlignment="Right"/>
+        </StackPanel>
+    </Grid>
+</Window>

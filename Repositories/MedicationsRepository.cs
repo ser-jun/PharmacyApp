@@ -1,26 +1,45 @@
-﻿using PharmacyApp.Models;
-using PharmacyApp.Repositories.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
 using PharmacyApp.DTO;
-using Microsoft.EntityFrameworkCore;
+using PharmacyApp.Models;
+using PharmacyApp.Repositories.Interfaces;
 namespace PharmacyApp.Repositories
 {
-    public class MedicationsRepository
+    public class MedicationsRepository : IMedicationsRepository, IMedicationFormAdd
     {
         private readonly PharmacyDbContext _context;
-        
-        public MedicationsRepository(PharmacyDbContext context) 
+        private readonly ICrudRepository<Medication> _crudOperationMedication;
+        private readonly ICrudRepository<MedicationType> _crudTypeMedication;
+        private readonly ICrudRepository<MedicationCategory> _crudCategoryMedication;
+        public MedicationsRepository(PharmacyDbContext context)
         {
-        _context = context;
+            _context = context;
+            _crudOperationMedication = new CrudRepository<Medication>(context);
+            _crudTypeMedication = new CrudRepository<MedicationType>(context);
+            _crudCategoryMedication = new CrudRepository<MedicationCategory>(context);
         }
-
         public async Task<IEnumerable<MedicationsItems>> LoadMedicationsInfo()
         {
             return await _context.Database.SqlQueryRaw<MedicationsItems>("CALL GetFullMedicationInfo").ToListAsync();
+        }
+        public async Task AddMedicationItem(string medicationName, bool isreadyMade, decimal price, MedicationType type, MedicationCategory category)
+        {
+            var medication = new Medication
+            {
+                Name = medicationName,
+                IsReadyMade = isreadyMade,
+                Price = price,
+                Type = type,
+                Category = category
+            };
+            await _crudOperationMedication.AddAsync(medication);
+        }
+        public async Task<IEnumerable<MedicationType>> LoadMedicationType()
+        {
+            return await _crudTypeMedication.GetAllAsync();
+        }
+        public async Task<IEnumerable<MedicationCategory>> LoadMedicationCategory()
+        {
+            return await _crudCategoryMedication.GetAllAsync();
         }
     }
 }
