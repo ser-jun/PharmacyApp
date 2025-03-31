@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PharmacyApp.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,8 @@ namespace PharmacyApp.Repositories.Interfaces
 {
     public interface IAdminRepository
     {
-        Task UpdateUser(string newName, string newFullName, string newPhone, int userId);
-        Task DeleteUser(int userId);
+        Task UpdateItemUser(string newName, string newFullName, string newPhone, int userId);
+        Task DeleteItemUser(int userId);
+        Task<IEnumerable<User>> LoadUsers();
     }
 }

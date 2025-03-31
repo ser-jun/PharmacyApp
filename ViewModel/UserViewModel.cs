@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
 using PharmacyApp.Repositories.Interfaces;
+using PharmacyApp.View;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -100,13 +101,11 @@ namespace PharmacyApp.ViewModel
         private async Task ExecuteEntry()
         {
             var user = await _userRepository.AuthenticateAsync(UserName, Password);
-            if (user != null)
+            switch (user.Role)
             {
-                MessageBox.Show($"Добро пожаловать, {user.FullName}!");
-            }
-            else
-            {
-                MessageBox.Show("Неверные учетные данные");
+                case "admin":
+                    NavigationService.OpenWindow<AdminWindow>();
+                    break;
             }
         }
 

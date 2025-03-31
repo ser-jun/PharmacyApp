@@ -5,7 +5,7 @@ using System.Windows;
 
 namespace PharmacyApp.Repositories
 {
-    public class UsersRepository : IUserRepository
+    public class UsersRepository : IUserRepository, IAdminRepository
     {
         private readonly PharmacyDbContext _context;
         private ICrudRepository<User> _userCrudRepository;
@@ -42,24 +42,23 @@ namespace PharmacyApp.Repositories
 
             return user;
         }
-        public async Task DeleteUser(int userId)
+        public async Task DeleteItemUser(int userId)
         {
             var selectedUser = await _userCrudRepository.GetByIdAsync(userId);
             await _userCrudRepository.DeleteAsync(selectedUser);
         }
-        public async Task UpdateUser(string newName, string newFullName, string newPhone, int userId)
+        public async Task UpdateItemUser(string newName, string newFullName, string newPhone, int userId)
         {
             var userForUpdating = await _userCrudRepository.GetByIdAsync(userId);
 
-            userForUpdating = new User
-            {
-                Username = newName,
-                PasswordHash = userForUpdating.PasswordHash,
-                Role = userForUpdating.Role,
-                FullName = newFullName,
-                ContactPhone = newPhone
-            };
+            userForUpdating.Username = newName;
+            userForUpdating.FullName= newFullName;
+            userForUpdating.ContactPhone = newPhone;    
             await _userCrudRepository.UpdateAsync(userForUpdating);
+        }
+        public async Task<IEnumerable<User>> LoadUsers()
+        {
+            return await _userCrudRepository.GetAllAsync(); 
         }
     }
 }

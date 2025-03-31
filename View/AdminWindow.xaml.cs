@@ -1,4 +1,6 @@
-﻿using System;
+﻿using PharmacyApp.Models;
+using PharmacyApp.Repositories.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +13,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using PharmacyApp.Repositories;
+using PharmacyApp.ViewModel;
 
 namespace PharmacyApp.View
 {
@@ -22,6 +26,9 @@ namespace PharmacyApp.View
         public AdminWindow()
         {
             InitializeComponent();
+            var context = new PharmacyDbContext();
+            IAdminRepository adminRepository = new UsersRepository(context);
+            DataContext = new AdminViewModel(adminRepository);
         }
     }
 }
