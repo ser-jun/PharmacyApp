@@ -33,6 +33,23 @@ namespace PharmacyApp.Repositories
             };
             await _crudOperationMedication.AddAsync(medication);
         }
+        public async Task DeleteMedicationItem(int medicationId)
+        {
+            var itemToDelete = await _crudOperationMedication.GetByIdAsync(medicationId);
+            await _crudOperationMedication.DeleteAsync(itemToDelete);
+        }
+        public async Task UpdateMedicationItem(int medicationId, string newName, bool newStatus, decimal newPrice, MedicationType newType, MedicationCategory newCategory)
+        {
+            var medication = await _crudOperationMedication.GetByIdAsync(medicationId);
+
+            medication.Name = newName;
+            medication.IsReadyMade = newStatus;
+            medication.Price = newPrice;
+            medication.Type = newType;
+            medication.Category = newCategory;
+
+            await _crudOperationMedication.UpdateAsync(medication);
+        }
         public async Task<IEnumerable<MedicationType>> LoadMedicationType()
         {
             return await _crudTypeMedication.GetAllAsync();

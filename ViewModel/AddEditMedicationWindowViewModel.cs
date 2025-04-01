@@ -11,7 +11,7 @@ using System.Windows.Input;
 
 namespace PharmacyApp.ViewModel
 {
-    public class AddMedicationWindowViewModel : INotifyPropertyChanged
+    public class AddEditMedicationWindowViewModel : INotifyPropertyChanged
     {
         public ICommand AddEntryCommand { get; }
         private IMedicationFormAdd _medicationFormAdd;
@@ -25,7 +25,7 @@ namespace PharmacyApp.ViewModel
         private MedicationType _selectedType;
         private MedicationCategory _selectedCategory;
         private bool _isReadyMade;
-        public AddMedicationWindowViewModel(IMedicationFormAdd medicationFormAdd) 
+        public AddEditMedicationWindowViewModel(IMedicationFormAdd medicationFormAdd) 
         {
         _medicationFormAdd = medicationFormAdd;
             AddEntryCommand = new RelayCommand(async () => await AddMedication());

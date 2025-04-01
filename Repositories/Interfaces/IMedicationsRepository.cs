@@ -11,5 +11,7 @@ namespace PharmacyApp.Repositories.Interfaces
     public interface IMedicationsRepository
     {
         Task<IEnumerable<MedicationsItems>> LoadMedicationsInfo();
+        Task DeleteMedicationItem(int medicationId);
+        Task UpdateMedicationItem(int medicationId, string newName, bool newStatus, decimal newPrice, MedicationType newType, MedicationCategory newCategory);
     }
 }

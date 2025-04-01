@@ -28,7 +28,7 @@ namespace PharmacyApp.View
             InitializeComponent();
             var context = new PharmacyDbContext();
             IMedicationFormAdd medicationForm = new MedicationsRepository(context);
-            DataContext = new AddMedicationWindowViewModel(medicationForm);
+            DataContext = new AddEditMedicationWindowViewModel(medicationForm);
         }
     }
 }
