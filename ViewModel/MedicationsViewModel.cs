@@ -1,4 +1,6 @@
 ﻿using PharmacyApp.DTO;
+using PharmacyApp.Models;
+using PharmacyApp.Repositories;
 using PharmacyApp.Repositories.Interfaces;
 using PharmacyApp.View;
 using System.Collections.ObjectModel;
@@ -20,8 +22,9 @@ namespace PharmacyApp.ViewModel
         public MedicationsViewModel(IMedicationsRepository medicationsRepository)
         {
             _medicationsRepository = medicationsRepository;
-            OpenAddWindowCommand = new RelayCommand(OpenFormToAddUpdate);
+            OpenAddWindowCommand = new RelayCommand(OpenFormToAdd);
             DeleteItemCommand = new RelayCommand(async () => await DeleteMedication());
+            EditItemCommand = new RelayCommand(OpenFormToEdit);
             LoadMedications();
         }
         public ObservableCollection<MedicationsItems> Medications
@@ -53,7 +56,7 @@ namespace PharmacyApp.ViewModel
             await LoadMedications();
         }
 
-        private void OpenFormToAddUpdate()
+        private void OpenFormToAdd()
         {
             var addWindow = NavigationService.OpenForm<AddMedicationWindow>();
             if (addWindow.DataContext is AddEditMedicationWindowViewModel vm)
@@ -63,6 +66,21 @@ namespace PharmacyApp.ViewModel
                     await LoadMedications();
                 };
             }
+        }
+        private void OpenFormToEdit()
+        {
+            var editWindow = new AddMedicationWindow(SelectedMedication);
+
+            if (editWindow.DataContext is AddEditMedicationWindowViewModel vm)
+            {
+                vm.MedicationUpdated += async () =>
+                {
+                    await LoadMedications();
+                    editWindow.Close();
+                };
+            }
+
+            editWindow.ShowDialog();
         }
         protected virtual void OnPropertyChanged(string propertyName)
         {

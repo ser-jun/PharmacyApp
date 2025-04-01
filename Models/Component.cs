@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PharmacyApp.Models;
 
@@ -14,6 +15,8 @@ public partial class Component
     public decimal CriticalNorm { get; set; }
 
     public int? ShelfLife { get; set; }
+    [NotMapped] 
+    public bool IsSelected { get; set; }
 
     public virtual ICollection<MedicationComponent> MedicationComponents { get; set; } = new List<MedicationComponent>();
 

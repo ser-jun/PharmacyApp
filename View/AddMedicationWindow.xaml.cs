@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using PharmacyApp.Repositories;
 using PharmacyApp.ViewModel;
+using PharmacyApp.DTO;
 
 namespace PharmacyApp.View
 {
@@ -27,8 +28,15 @@ namespace PharmacyApp.View
         {
             InitializeComponent();
             var context = new PharmacyDbContext();
-            IMedicationFormAdd medicationForm = new MedicationsRepository(context);
+            IMedicationFormAddEdit medicationForm = new MedicationsRepository(context);
             DataContext = new AddEditMedicationWindowViewModel(medicationForm);
+        }
+        public AddMedicationWindow(MedicationsItems medicationToEdit)
+        {
+            InitializeComponent();
+            var context = new PharmacyDbContext();
+            IMedicationFormAddEdit medicationForm = new MedicationsRepository(context);
+            DataContext = new AddEditMedicationWindowViewModel(medicationForm,  medicationToEdit);
         }
     }
 }
