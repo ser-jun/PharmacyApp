@@ -11,12 +11,14 @@ namespace PharmacyApp.Repositories
         private readonly ICrudRepository<MedicationType> _crudTypeMedication;
         private readonly ICrudRepository<MedicationCategory> _crudCategoryMedication;
         private readonly ICrudRepository<Component> _crudComponent;
+        private readonly ICrudRepository<MedicationComponent> _crudMedicationComponent;
         public MedicationsRepository(PharmacyDbContext context)
         {
             _context = context;
             _crudOperationMedication = new CrudRepository<Medication>(context);
             _crudTypeMedication = new CrudRepository<MedicationType>(context);
             _crudCategoryMedication = new CrudRepository<MedicationCategory>(context);
+            _crudMedicationComponent = new CrudRepository<MedicationComponent>(context);    
             _crudComponent = new CrudRepository<Component>(context);
         }
         public async Task<IEnumerable<MedicationsItems>> LoadMedicationsInfo()
@@ -25,7 +27,7 @@ namespace PharmacyApp.Repositories
         }
         public async Task AddMedicationItem(string medicationName, bool isReadyMade, decimal price,
      MedicationType type, MedicationCategory category,
-     List<MedicationComponentDto> components)
+     List<Component> components, Dictionary<int, decimal> componentsAmount)
         {
             using (var transaction = await _context.Database.BeginTransactionAsync())
             {
@@ -40,24 +42,18 @@ namespace PharmacyApp.Repositories
                 };
 
                 await _crudOperationMedication.AddAsync(medication);
-                await _context.SaveChangesAsync();
 
-                foreach (var componentDto in components)
+                foreach (var component in components)
                 {
                     var medicationComponent = new MedicationComponent
                     {
                         MedicationId = medication.MedicationId,
-                        ComponentId = componentDto.ComponentId,
-                        Amount = componentDto.Amount
+                        ComponentId = component.ComponentId,
+                        Amount = componentsAmount[component.ComponentId]
                     };
-
-                    _context.MedicationComponents.Add(medicationComponent);
+                    await _crudMedicationComponent.AddAsync(medicationComponent);
                 }
-
-                await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
-
-
             }
 
         }
