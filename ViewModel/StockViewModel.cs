@@ -52,7 +52,7 @@ namespace PharmacyApp.ViewModel
             set
             {
                 _selectedItem = value;
-                FeelTextBoxs();
+                FillTextBoxs();
                 OnPropertyChanged(nameof(SelectedItem));
             }
         }
@@ -133,7 +133,7 @@ namespace PharmacyApp.ViewModel
                 ArrivalDate, ShelfLife);
             await LoadData();
         }
-        private void FeelTextBoxs()
+        private void FillTextBoxs()
         {
             if (SelectedItem != null)
             {

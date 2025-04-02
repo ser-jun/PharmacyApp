@@ -91,9 +91,6 @@ public partial class PharmacyDbContext : DbContext
             entity.Property(e => e.FullName)
                 .HasMaxLength(100)
                 .HasColumnName("full_name");
-            entity.Property(e => e.Phone)
-                .HasMaxLength(20)
-                .HasColumnName("phone");
         });
 
         modelBuilder.Entity<Doctor>(entity =>
