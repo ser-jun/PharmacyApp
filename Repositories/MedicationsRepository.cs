@@ -66,7 +66,9 @@ namespace PharmacyApp.Repositories
             var itemToDelete = await _crudOperationMedication.GetByIdAsync(medicationId);
             await _crudOperationMedication.DeleteAsync(itemToDelete);
         }
-        public async Task UpdateMedicationItem(int medicationId, string newName, bool newStatus, decimal newPrice, MedicationType newType, MedicationCategory newCategory)
+        public async Task UpdateMedicationItem(int medicationId, string newName, bool newStatus, decimal newPrice, 
+            MedicationType newType, MedicationCategory newCategory, List<Component> newComponents,
+            Dictionary<int, decimal> newComponentsAmount)
         {
             var medication = await _crudOperationMedication.GetByIdAsync(medicationId);
 
@@ -77,6 +79,25 @@ namespace PharmacyApp.Repositories
             medication.Category = newCategory;
 
             await _crudOperationMedication.UpdateAsync(medication);
+            var existingComponents = _context.MedicationComponents
+                  .Where(mc => mc.MedicationId == medicationId)
+                  .ToList();
+
+            foreach (var component in existingComponents)
+            {
+                await _crudMedicationComponent.DeleteAsync(component);
+            }
+
+            foreach (var component in newComponents)
+            {
+                var medicationComponent = new MedicationComponent
+                {
+                    MedicationId = medicationId,
+                    ComponentId = component.ComponentId,
+                    Amount = newComponentsAmount[component.ComponentId]
+                };
+                await _crudMedicationComponent.AddAsync(medicationComponent);
+            }
         }
         public async Task<IEnumerable<MedicationType>> LoadMedicationType()
         {

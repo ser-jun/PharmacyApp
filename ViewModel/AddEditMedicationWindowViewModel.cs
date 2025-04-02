@@ -205,7 +205,8 @@ namespace PharmacyApp.ViewModel
         }
         private async Task UpdateMedication ()
         {
-            await _medicationFormAddEdit.UpdateMedicationItem(_medicationToEdit.MedicationId, Name, IsReadyMade, Price, SelectedType, SelectedCategory);
+            await _medicationFormAddEdit.UpdateMedicationItem(_medicationToEdit.MedicationId, Name, IsReadyMade, Price, SelectedType, SelectedCategory, 
+                SelectedComponents.ToList(), _componentAmounts);
             MedicationUpdated?.Invoke();
         }
         private async Task ExecuteAction()

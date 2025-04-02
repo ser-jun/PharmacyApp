@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PharmacyApp.Models;
 
 public partial class Medication
 {
+    [Column("medication_id")]
     public int MedicationId { get; set; }
 
     public string Name { get; set; } = null!;

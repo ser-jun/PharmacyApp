@@ -175,24 +175,18 @@ public partial class PharmacyDbContext : DbContext
 
             entity.ToTable("medication_components");
 
-            entity.HasIndex(e => e.ComponentId, "component_id");
-
-            entity.Property(e => e.MedicationId).HasColumnName("medication_id");
-            entity.Property(e => e.ComponentId).HasColumnName("component_id");
-            entity.Property(e => e.Amount)
-                .HasPrecision(10, 3)
-                .HasColumnName("amount");
-
-            entity.HasOne(d => d.Component).WithMany(p => p.MedicationComponents)
-                .HasForeignKey(d => d.ComponentId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("medication_components_ibfk_2");
-
-            entity.HasOne(d => d.Medication).WithMany(p => p.MedicationComponents)
+            entity.HasOne(d => d.Medication)
+                .WithMany(p => p.MedicationComponents)
                 .HasForeignKey(d => d.MedicationId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade) 
                 .HasConstraintName("medication_components_ibfk_1");
+
+            entity.HasOne(d => d.Component)
+                .WithMany(p => p.MedicationComponents)
+                .HasForeignKey(d => d.ComponentId)
+                .HasConstraintName("medication_components_ibfk_2");
         });
+
 
         modelBuilder.Entity<MedicationType>(entity =>
         {

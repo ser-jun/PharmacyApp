@@ -13,7 +13,9 @@ namespace PharmacyApp.Repositories.Interfaces
         Task AddMedicationItem(string medicationName, bool isReadyMade, decimal price,
        MedicationType type, MedicationCategory category,
        List<Component> components, Dictionary<int, decimal> componentsAmount);
-        Task UpdateMedicationItem(int medicationId, string newName, bool newStatus, decimal newPrice, MedicationType newType, MedicationCategory newCategory);
+        Task UpdateMedicationItem(int medicationId, string newName, bool newStatus, decimal newPrice,
+            MedicationType newType, MedicationCategory newCategory, List<Component> newComponents,
+            Dictionary<int, decimal> newComponentsAmount);
         Task<IEnumerable<MedicationType>> LoadMedicationType();
         Task<IEnumerable<MedicationCategory>> LoadMedicationCategory();
         Task<IEnumerable<Component>> GetComponentList();
