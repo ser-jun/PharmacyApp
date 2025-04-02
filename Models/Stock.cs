@@ -11,9 +11,7 @@ public partial class Stock
 
     public decimal Amount { get; set; }
 
-    public DateOnly ArrivalDate { get; set; }
-
-    public DateOnly ExpirationDate { get; set; }
+    public DateTime ArrivalDate { get; set; }
 
     public virtual Component Component { get; set; } = null!;
 }

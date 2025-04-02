@@ -328,11 +328,12 @@ public partial class PharmacyDbContext : DbContext
                 .HasColumnName("amount");
             entity.Property(e => e.ArrivalDate).HasColumnName("arrival_date");
             entity.Property(e => e.ComponentId).HasColumnName("component_id");
-            entity.Property(e => e.ExpirationDate).HasColumnName("expiration_date");
 
-            entity.HasOne(d => d.Component).WithMany(p => p.Stocks)
+
+            entity.HasOne(d => d.Component)
+                .WithMany(p => p.Stocks)
                 .HasForeignKey(d => d.ComponentId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade) 
                 .HasConstraintName("stock_ibfk_1");
         });
 

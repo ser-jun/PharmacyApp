@@ -12,23 +12,23 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using PharmacyApp.ViewModel;
 using PharmacyApp.Repositories.Interfaces;
 using PharmacyApp.Repositories;
+using PharmacyApp.ViewModel;
 
 namespace PharmacyApp.View
 {
     /// <summary>
-    /// Логика взаимодействия для ComponentWindow.xaml
+    /// Логика взаимодействия для StockWindow.xaml
     /// </summary>
-    public partial class ComponentWindow : Window
+    public partial class StockWindow : Window
     {
-        public ComponentWindow()
+        public StockWindow()
         {
             InitializeComponent();
             var context = new PharmacyDbContext();
-            IComponentRepository componentRepository = new ComponentRepository(context);
-            DataContext = new ComponentViewModel(componentRepository);
+            IstockRepository stockRepository = new StockRepository(context);
+            DataContext = new StockViewModel(stockRepository);
         }
     }
 }
