@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PharmacyApp.Models;
 using PharmacyApp.Repositories.Interfaces;
+using System.Data;
 using System.Windows;
 
 namespace PharmacyApp.Repositories
@@ -9,13 +10,15 @@ namespace PharmacyApp.Repositories
     {
         private readonly PharmacyDbContext _context;
         private ICrudRepository<User> _userCrudRepository;
+        private readonly ICrudRepository<Customer> _crudCustomer;
         public UsersRepository(PharmacyDbContext context)
         {
             _context = context;
             _userCrudRepository = new CrudRepository<User>(context);
+            _crudCustomer = new CrudRepository<Customer>(context);
         }
 
-        public async Task<User> RegisterUser(string name, string password, string role, string fullName, string phone)
+        public async Task<User> RegisterUser(string name, string password, string role, string fullName, string phone, DateTime birth, string address)
         {
             if (await _context.Users.AnyAsync(u => u.Username == name))
             {
@@ -30,6 +33,15 @@ namespace PharmacyApp.Repositories
                 FullName = fullName,
                 ContactPhone = phone
             };
+            if (role == "customer")
+            {
+                var newCustomer = new Customer
+                {
+                    BirthDate = birth,
+                    Address = address
+                };
+                await _crudCustomer.AddAsync(newCustomer);
+            }
             return await _userCrudRepository.AddAsync(newUser);
         }
         public async Task<User> AuthenticateAsync(string name, string password)

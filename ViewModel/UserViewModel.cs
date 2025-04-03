@@ -24,6 +24,8 @@ namespace PharmacyApp.ViewModel
         private string _phoneNumber;
         private string _fullName;
         private string _selectedRole;
+        private DateTime _birthDate;
+        private string _address;
 
 
         private readonly IUserRepository _userRepository;
@@ -44,10 +46,38 @@ namespace PharmacyApp.ViewModel
         public UserViewModel(IUserRepository userRepository) 
         {
             _userRepository = userRepository;
-            RegisterCommand = (ICommand)new RelayCommand(async () => await ExecuteRegister());
+            RegisterCommand = new RelayCommand(async () => await ExecuteRegister());
             EntryCommand = new RelayCommand(async () => await ExecuteEntry());
+            PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == nameof(SelectedRole))
+                {
+                    OnPropertyChanged(nameof(IsCustomerSelected));
+                }
+            };
+            BirthDate = DateTime.Now;
         }
-  
+        public DateTime BirthDate
+        {
+            get => _birthDate;
+            set
+            {
+                _birthDate = value;
+                OnPropertyChanged(nameof(BirthDate));
+            }
+        }
+
+        public string? Address
+        {
+            get => _address;
+            set
+            {
+                _address = value;
+                OnPropertyChanged(nameof(Address));
+            }
+        }
+
+        public bool IsCustomerSelected => SelectedRole == "Пользователь";
         public string SelectedRole
         {
             get => _selectedRole;
@@ -116,8 +146,18 @@ namespace PharmacyApp.ViewModel
                 MessageBox.Show("Выберите корректную роль");
                 return;
             }
-                await _userRepository.RegisterUser(UserName, Password, dbRole, FullName, PhoneNumber);   
-    
+                await _userRepository.RegisterUser(UserName, Password, dbRole, FullName, PhoneNumber, BirthDate, Address);   
+    ClearInputFields();
+        }
+        private void ClearInputFields()
+        {
+            UserName = null;
+            Password = null;
+            SelectedRole = null;
+            FullName = null;
+            PhoneNumber = string.Empty;
+            BirthDate = DateTime.Now;
+            Address = string.Empty;
         }
         protected virtual void OnPropertyChanged(string propertyName)
         {
