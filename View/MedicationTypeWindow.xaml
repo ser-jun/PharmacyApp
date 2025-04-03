@@ -5,8 +5,67 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PharmacyApp.View"
         mc:Ignorable="d"
-        Title="MedicationTypeWindow" Height="450" Width="800">
-    <Grid>
-        
+        Title="Управление типами лекарств" 
+        Height="400" 
+        Width="800"
+        WindowStartupLocation="CenterScreen">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+   
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 0 10">
+            <Button Content="Добавить" Width="100" Margin="5" Command="{Binding AddTypeCommand}"/>
+            <Button Content="Редактировать" Width="100" Margin="5" Command="{Binding EditTypeCommand}"/>
+            <Button Content="Удалить" Width="100" Margin="5" Command="{Binding DeleteTypeCommand}"/>
+            <Button Content="Очистить" Width="100" Margin="5" Command="{Binding ClearFormCommand}"/>
+        </StackPanel>
+
+
+        <DataGrid Grid.Row="1" 
+                  ItemsSource="{Binding MedicationTypes}"
+                  SelectedItem="{Binding SelectedType}"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  IsReadOnly="True"
+                  SelectionMode="Single">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding TypeId}" Width="Auto"/>
+                <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="*"/>
+                <DataGridTextColumn Header="Способ применения" Binding="{Binding ApplicationMethod}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+
+        <GroupBox Grid.Row="2" Header="Данные типа лекарства" Margin="0 10 0 0">
+            <Grid Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Название:" Margin="5" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="0" Grid.Column="1" 
+                         Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" 
+                         Margin="5"/>
+
+                <TextBlock Grid.Row="0" Grid.Column="2" Text="Способ применения:" Margin="5" VerticalAlignment="Center"/>
+                <ComboBox Grid.Row="0" Grid.Column="3" 
+                          ItemsSource="{Binding ApplicationMethods}"
+                          SelectedItem="{Binding SelectedApplicationMethod}"
+                          Margin="5"/>
+
+           
+            </Grid>
+        </GroupBox>
     </Grid>
 </Window>

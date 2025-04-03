@@ -88,9 +88,6 @@ public partial class PharmacyDbContext : DbContext
                 .HasColumnType("text")
                 .HasColumnName("address");
             entity.Property(e => e.BirthDate).HasColumnName("birth_date");
-            entity.Property(e => e.FullName)
-                .HasMaxLength(100)
-                .HasColumnName("full_name");
         });
 
         modelBuilder.Entity<Doctor>(entity =>

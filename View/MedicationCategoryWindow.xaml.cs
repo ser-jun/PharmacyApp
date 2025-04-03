@@ -19,15 +19,15 @@ using PharmacyApp.ViewModel;
 namespace PharmacyApp.View
 {
     /// <summary>
-    /// Логика взаимодействия для MedicationCategoryRepository.xaml
+    /// Логика взаимодействия для MedicationCategoryWindow.xaml
     /// </summary>
-    public partial class MedicationCategoryRepository : Window
+    public partial class MedicationCategoryWindow : Window
     {
-        public MedicationCategoryRepository()
+        public MedicationCategoryWindow()
         {
             InitializeComponent();
             var context = new PharmacyDbContext();
-            IMedicationCategoryRepository categoryRepository = new MedicationCategoriesRepository(context);
+            IMedicationCategoryRepository categoryRepository = new MedicationCategoriesRepository(context); 
             DataContext = new MedicationCategoryViewModel(categoryRepository);
         }
     }

@@ -33,6 +33,7 @@ namespace PharmacyApp.ViewModel
             DeleteTypeCommand = new RelayCommand(async () => await DeleteType());
             EditTypeCommand = new RelayCommand(async () => await UpdateType());
             ClearFormCommand = new RelayCommand(ClearTextBoxs);
+            _ = LoadData();
         }
         
         public ObservableCollection<MedicationType> MedicationTypes
