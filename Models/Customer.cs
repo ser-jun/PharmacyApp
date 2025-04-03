@@ -13,7 +13,5 @@ public partial class Customer
 
     public string? Address { get; set; }
 
-    public string? Phone { get; set; }
-
     public virtual ICollection<Prescription> Prescriptions { get; set; } = new List<Prescription>();
 }
