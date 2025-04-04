@@ -13,7 +13,7 @@ namespace PharmacyApp.DTO
         public string ContactPerson { get; set; }
         public string Phone { get; set; }
         public string Email { get; set; }
-        public byte Rating { get; set; }
+        public sbyte Rating { get; set; }
         public int ComponentId { get; set; }
         public string ComponentName { get; set; }
 
