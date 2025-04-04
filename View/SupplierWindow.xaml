@@ -41,10 +41,6 @@
                     <TextBlock Text="Рейтинг (0-10):"/>
                     <TextBox Text="{Binding Rating, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,5"/>
 
-                    <TextBlock Text="Цена за единицу:"/>
-                    <TextBox Text="{Binding PricePerUnit, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,5"/>
-
-               
                     <TextBlock Text="Выберите компоненты:" Margin="0,5,0,0"/>
                     <ComboBox x:Name="componentsComboBox" 
                               ItemsSource="{Binding AllComponents}"
@@ -72,12 +68,14 @@
                   IsReadOnly="True"
                   Margin="0,0,0,10">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Поставщик" Binding="{Binding SupplierName}" Width="*"/>
-                <DataGridTextColumn Header="Контакт" Binding="{Binding ContactPerson}" Width="*"/>
-                <DataGridTextColumn Header="Телефон" Binding="{Binding Phone}" Width="*"/>
+                <DataGridTextColumn Header="Поставщик" Binding="{Binding SupplierName}" Width="Auto"/>
+                <DataGridTextColumn Header="Контакт" Binding="{Binding ContactPerson}" Width="Auto"/>
+                <DataGridTextColumn Header="Телефон" Binding="{Binding Phone}" Width="Auto"/>
+                <DataGridTextColumn Header="Время доставки" Binding="{Binding DeliveryTimeDays}" Width="Auto"/>
                 <DataGridTextColumn Header="Рейтинг" Binding="{Binding Rating}" Width="Auto"/>
+                <DataGridTextColumn Header="Почта" Binding="{Binding Email}" Width="Auto"/>
                 <DataGridTextColumn Header="Компоненты" Binding="{Binding ComponentName}" Width="*"/>
-                <DataGridTextColumn Header="Цена" Binding="{Binding PricePerUnit}" Width="Auto"/>
+
             </DataGrid.Columns>
         </DataGrid>
 

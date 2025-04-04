@@ -368,9 +368,6 @@ public partial class PharmacyDbContext : DbContext
             entity.Property(e => e.SupplierId).HasColumnName("supplier_id");
             entity.Property(e => e.ComponentId).HasColumnName("component_id");
             entity.Property(e => e.DeliveryTime).HasColumnName("delivery_time");
-            entity.Property(e => e.UnitPrice)
-                .HasPrecision(10, 2)
-                .HasColumnName("unit_price");
 
             entity.HasOne(d => d.Supplier)
                    .WithMany(p => p.SupplierComponents)

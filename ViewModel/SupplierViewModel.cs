@@ -30,7 +30,6 @@ namespace PharmacyApp.ViewModel
         private string _email;
         private sbyte _rating;
         private int _deliveryTimeDays;
-        private decimal _pricePerUnit;
         private int _componentId;
         public SupplierViewModel(ISupplierRepository supplierRepository, ICrudRepository<Models.Component> crudComponent, PharmacyDbContext context)
         {
@@ -125,15 +124,6 @@ namespace PharmacyApp.ViewModel
                 OnPropertyChanged(nameof(DeliveryTimeDays));
             }
         }
-        public decimal PricePerUnit
-        {
-            get => _pricePerUnit;
-            set
-            {
-                _pricePerUnit = value;
-                OnPropertyChanged(nameof(PricePerUnit));
-            }
-        }
         public int ComponentId
         {
             get => _componentId;
@@ -164,7 +154,7 @@ namespace PharmacyApp.ViewModel
             try
             {
 
-                await _supplierRepository.AddSupplierItem(SupplierName, ContactPerson, Phone, Email, Rating, DeliveryTimeDays, PricePerUnit,
+                await _supplierRepository.AddSupplierItem(SupplierName, ContactPerson, Phone, Email, Rating, DeliveryTimeDays,
                   GetSelectedComponents());
             }
             catch (Exception ex)
@@ -205,7 +195,7 @@ namespace PharmacyApp.ViewModel
         private async Task Updatesupplier()
         {
             await _supplierRepository.UpdateSupplierItem(SelectedSupplier.SupplierId, SupplierName, ContactPerson,
-                Phone, Email, Rating, DeliveryTimeDays, PricePerUnit, GetSelectedComponents());
+                Phone, Email, Rating, DeliveryTimeDays, GetSelectedComponents());
             await LoadData();
         }
         private void ClearFields()
@@ -216,7 +206,6 @@ namespace PharmacyApp.ViewModel
             Email = null;
             Rating = 0;
             DeliveryTimeDays = 0;
-            PricePerUnit = 0;
             foreach (var component in AllComponents)
             {
                 component.IsSelected = false;
@@ -232,7 +221,6 @@ namespace PharmacyApp.ViewModel
             Rating = SelectedSupplier.Rating;
             ComponentId = SelectedSupplier.ComponentId;
             DeliveryTimeDays = SelectedSupplier.DeliveryTimeDays;
-            PricePerUnit = SelectedSupplier.PricePerUnit;
             MarkSelectedComponents();
         }
         private void MarkSelectedComponents()

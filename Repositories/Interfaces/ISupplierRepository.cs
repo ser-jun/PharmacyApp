@@ -12,9 +12,9 @@ namespace PharmacyApp.Repositories.Interfaces
     {
         Task<IEnumerable<SupplierDto>> LoadSupplierInfo();
         Task AddSupplierItem(string name, string? contactPerson, string phone, string email,
-            sbyte raiting, int? deliveryTime, decimal price, List<Component> supplierComponents);
+            sbyte raiting, int? deliveryTime, List<Component> supplierComponents);
         Task DeleteSupplierItem(int supplierId);
         Task UpdateSupplierItem(int supplierId, string name, string? contactPerson, string phone, string email, sbyte rating,
-        int? deliveryTime, decimal price, List<Component> supplierComponents);
+        int? deliveryTime, List<Component> supplierComponents);
     }
 }

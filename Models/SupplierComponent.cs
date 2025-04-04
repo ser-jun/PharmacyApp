@@ -11,8 +11,6 @@ public partial class SupplierComponent
 
     public int? DeliveryTime { get; set; }
 
-    public decimal? UnitPrice { get; set; }
-
     public virtual Component Component { get; set; } = null!;
 
     public virtual Supplier Supplier { get; set; } = null!;

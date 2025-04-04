@@ -22,7 +22,7 @@ namespace PharmacyApp.Repositories
             return await _context.Database.SqlQueryRaw<SupplierDto>("CALL GetSupplier()").ToListAsync();
         }
         public async Task AddSupplierItem(string name, string? contactPerson, string phone, string email,
-            sbyte raiting, int? deliveryTime, decimal price, List<Component> supplierComponents)
+            sbyte raiting, int? deliveryTime, List<Component> supplierComponents)
         {
             var supplier = new Supplier
             {
@@ -40,7 +40,6 @@ namespace PharmacyApp.Repositories
                     SupplierId =supplier.SupplierId,
                     ComponentId = component.ComponentId,
                     DeliveryTime = deliveryTime,
-                    UnitPrice = price
                 };
                 await _crudSupplierComponent.AddAsync(supplierComponent);
             }
@@ -51,7 +50,7 @@ namespace PharmacyApp.Repositories
             await _crudSupplier.DeleteAsync(dataToDelete);
         }
         public async Task UpdateSupplierItem(int supplierId, string name, string? contactPerson, string phone, string email,sbyte rating,
-        int? deliveryTime, decimal price, List<Component> supplierComponents)
+        int? deliveryTime, List<Component> supplierComponents)
         {
             var supplier = await _crudSupplier.GetByIdAsync(supplierId);
             supplier.Name = name;
@@ -76,7 +75,6 @@ namespace PharmacyApp.Repositories
                     SupplierId = supplierId, 
                     ComponentId = component.ComponentId,
                     DeliveryTime = deliveryTime,
-                    UnitPrice = price
                 };
                 await _crudSupplierComponent.AddAsync(supplierComponent);
             }

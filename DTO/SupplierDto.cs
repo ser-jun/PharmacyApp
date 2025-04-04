@@ -18,6 +18,6 @@ namespace PharmacyApp.DTO
         public string ComponentName { get; set; }
 
         public int DeliveryTimeDays { get; set; }
-        public decimal PricePerUnit { get; set; }
+
     }
 }
