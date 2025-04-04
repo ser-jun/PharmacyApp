@@ -147,7 +147,7 @@ namespace PharmacyApp.ViewModel
                 return;
             }
                 await _userRepository.RegisterUser(UserName, Password, dbRole, FullName, PhoneNumber, BirthDate, Address);   
-    ClearInputFields();
+                ClearInputFields();
         }
         private void ClearInputFields()
         {

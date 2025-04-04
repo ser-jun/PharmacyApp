@@ -372,10 +372,11 @@ public partial class PharmacyDbContext : DbContext
                 .HasPrecision(10, 2)
                 .HasColumnName("unit_price");
 
-            entity.HasOne(d => d.Component).WithMany(p => p.SupplierComponents)
-                .HasForeignKey(d => d.ComponentId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("supplier_components_ibfk_2");
+            entity.HasOne(d => d.Supplier)
+                   .WithMany(p => p.SupplierComponents)
+                   .HasForeignKey(d => d.SupplierId)
+                   .OnDelete(DeleteBehavior.Cascade) 
+                   .HasConstraintName("supplier_components_ibfk_1");
 
             entity.HasOne(d => d.Supplier).WithMany(p => p.SupplierComponents)
                 .HasForeignKey(d => d.SupplierId)
