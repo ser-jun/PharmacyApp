@@ -37,6 +37,7 @@ namespace PharmacyApp.Repositories
             {
                 var newCustomer = new Customer
                 {
+                    FullName = fullName,
                     BirthDate = birth,
                     Address = address
                 };

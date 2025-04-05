@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using Pomelo.EntityFrameworkCore.MySql.Scaffolding.Internal;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace PharmacyApp.Models;
 
@@ -84,6 +81,10 @@ public partial class PharmacyDbContext : DbContext
             entity.ToTable("customers");
 
             entity.Property(e => e.CustomerId).HasColumnName("customer_id");
+            entity.Property(e => e.FullName)
+            .HasMaxLength(100)
+            .HasColumnName("full_name")
+            .IsRequired();
             entity.Property(e => e.Address)
                 .HasColumnType("text")
                 .HasColumnName("address");
@@ -172,7 +173,7 @@ public partial class PharmacyDbContext : DbContext
             entity.HasOne(d => d.Medication)
                 .WithMany(p => p.MedicationComponents)
                 .HasForeignKey(d => d.MedicationId)
-                .OnDelete(DeleteBehavior.Cascade) 
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("medication_components_ibfk_1");
 
             entity.HasOne(d => d.Component)
@@ -299,7 +300,7 @@ public partial class PharmacyDbContext : DbContext
 
             entity.HasOne(d => d.Customer).WithMany(p => p.Prescriptions)
         .HasForeignKey(d => d.CustomerId)
-        .OnDelete(DeleteBehavior.Cascade) 
+        .OnDelete(DeleteBehavior.Cascade)
         .HasConstraintName("prescriptions_ibfk_1");
 
             entity.HasOne(d => d.Doctor).WithMany(p => p.Prescriptions)
@@ -327,7 +328,7 @@ public partial class PharmacyDbContext : DbContext
             entity.HasOne(d => d.Component)
                 .WithMany(p => p.Stocks)
                 .HasForeignKey(d => d.ComponentId)
-                .OnDelete(DeleteBehavior.Cascade) 
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("stock_ibfk_1");
         });
 
@@ -372,7 +373,7 @@ public partial class PharmacyDbContext : DbContext
             entity.HasOne(d => d.Supplier)
                    .WithMany(p => p.SupplierComponents)
                    .HasForeignKey(d => d.SupplierId)
-                   .OnDelete(DeleteBehavior.Cascade) 
+                   .OnDelete(DeleteBehavior.Cascade)
                    .HasConstraintName("supplier_components_ibfk_1");
 
             entity.HasOne(d => d.Supplier).WithMany(p => p.SupplierComponents)

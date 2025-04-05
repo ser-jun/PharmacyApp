@@ -2,6 +2,7 @@
 using PharmacyApp.Repositories.Interfaces;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows;
 using System.Windows.Input;
 
 namespace PharmacyApp.ViewModel
@@ -38,7 +39,8 @@ namespace PharmacyApp.ViewModel
             AddCommand = new RelayCommand(async () => await AddPrescription());
             DeleteCommand = new RelayCommand(async () => await DeletePrescription());
             UpdateCommand = new RelayCommand(async () => await UpdatePrescription());
-            LoadData().ConfigureAwait(false);
+            ClearCommand = new RelayCommand(ClearFields);
+            _ = InitializeAsync();
         }
 
         public ObservableCollection<Customer> Customers
@@ -128,20 +130,45 @@ namespace PharmacyApp.ViewModel
             set
             {
                 _selectedPrescription = value;
+                FillFields();
                 OnPropertyChanged(nameof(SelectedPrescription));
             }
         }
-
+        private async Task InitializeAsync()
+        {
+            await LoadData();
+        }
         private async Task LoadData()
         {
-            var data = await _prescriptionRepository.LoadPrescriptionInfo();
-            Prescriptions = new ObservableCollection<Prescription>(data);
 
-            var doctorData = await _doctorRepository.GetAllAsync();
-            Doctors = new ObservableCollection<Doctor>(doctorData);
+            var prescriptions = await _prescriptionRepository.LoadPrescriptionInfo();
+            var doctors = await _doctorRepository.GetAllAsync();
+            var customers = await _customerRepository.GetAllAsync();
 
-            var customerData = await _customerRepository.GetAllAsync();
-            Customers = new ObservableCollection<Customer>(customerData);
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                Prescriptions = new ObservableCollection<Prescription>(prescriptions);
+                Doctors = new ObservableCollection<Doctor>(doctors);
+                Customers = new ObservableCollection<Customer>(customers);
+            });
+        }
+        private void FillFields()
+        {
+            SelectedCustomer = SelectedPrescription.Customer;
+            SelectedDoctor = SelectedPrescription.Doctor;
+            IssueDate = SelectedPrescription.IssueDate;
+            Diagnosis = SelectedPrescription.Diagnosis;
+            Dosage = SelectedPrescription.Dosage;
+            Duration = SelectedPrescription.Duration;
+        }
+        private void ClearFields()
+        {
+            SelectedCustomer = null;
+            SelectedDoctor = null;
+            IssueDate = DateTime.Now;
+            Diagnosis = null;
+            Dosage = null;
+            Duration = null;
         }
         private async Task AddPrescription()
         {
@@ -158,6 +185,7 @@ namespace PharmacyApp.ViewModel
         private async Task DeletePrescription()
         {
             await _prescriptionRepository.DeletePrescritionItem(SelectedPrescription);
+            await LoadData();
         }
 
         protected virtual void OnPropertyChanged(string propertyName)

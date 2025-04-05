@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PharmacyApp.View"
         mc:Ignorable="d"
-        Title="Управление рецептами" Height="550" Width="800">
+        Title="Управление рецептами" Height="550" Width="900">
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -34,7 +34,7 @@
                           ItemsSource="{Binding Customers}"
                           DisplayMemberPath="FullName"
                           SelectedValue="{Binding SelectedCustomer}"
-                          SelectedValuePath="CustomerId"/>
+                   />
 
              
                 <Label Grid.Row="0" Grid.Column="1" Content="Врач:"/>
@@ -42,7 +42,7 @@
                           ItemsSource="{Binding Doctors}"
                           DisplayMemberPath="FullName"
                           SelectedValue="{Binding SelectedDoctor}"
-                          SelectedValuePath="DoctorId"/>
+                       />
 
              
                 <Label Grid.Row="0" Grid.Column="2" Content="Дата выписки:"/>
@@ -70,14 +70,14 @@
         <DataGrid Grid.Row="1" ItemsSource="{Binding Prescriptions}" 
                   SelectedItem="{Binding SelectedPrescription}"
                   AutoGenerateColumns="False" CanUserAddRows="False"
-                  IsReadOnly="True">
+                  IsReadOnly="True"
+                  CanUserResizeColumns="False">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" Binding="{Binding PrescriptionId}" Width="Auto"/>
-                <DataGridTextColumn Header="Пациент" Binding="{Binding NameCustomer}" Width="*"/>
-                <DataGridTextColumn Header="Врач" Binding="{Binding DoctorName}" Width="*"/>
-                <DataGridTextColumn Header="Дата" Binding="{Binding IssueDate, StringFormat={}{0:dd.MM.yyyy}}" Width="Auto"/>
+                <DataGridTextColumn Header="Пациент" Binding="{Binding Customer.FullName}" Width="auto"/>
+                <DataGridTextColumn Header="Врач" Binding="{Binding Doctor.FullName}" Width="auto"/>
+                <DataGridTextColumn Header="Дата" Binding="{Binding IssueDate, StringFormat={}{0:dd.MM.yyyy}}" Width="auto"/>
                 <DataGridTextColumn Header="Диагноз" Binding="{Binding Diagnosis}" Width="*"/>
-                <DataGridTextColumn Header="Дозировка" Binding="{Binding Dosage}" Width="*"/>
+                <DataGridTextColumn Header="Лекарство/количество" Binding="{Binding Dosage}" Width="*"/>
                 <DataGridTextColumn Header="Длительность" Binding="{Binding Duration}" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
@@ -85,7 +85,7 @@
         
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 10 0 0">
             <Button Content="Добавить" Command="{Binding AddCommand}" Width="100" Margin="0 0 10 0"/>
-            <Button Content="Сохранить" Command="{Binding UpdateCommand}" Width="100" Margin="0 0 10 0"/>
+            <Button Content="Редактировать" Command="{Binding UpdateCommand}" Width="100" Margin="0 0 10 0"/>
             <Button Content="Удалить" Command="{Binding DeleteCommand}" Width="100" Margin="0 0 10 0"/>
             <Button Content="Очистить" Command="{Binding ClearCommand}" Width="100"/>
         </StackPanel>
