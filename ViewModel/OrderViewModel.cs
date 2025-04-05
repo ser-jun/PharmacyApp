@@ -1,4 +1,5 @@
-﻿using PharmacyApp.Models;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using PharmacyApp.Models;
 using PharmacyApp.Repositories.Interfaces;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -25,11 +26,14 @@ namespace PharmacyApp.ViewModel
         private ObservableCollection<Medication> _medications;
         private Medication _selectedMedication;
         private ObservableCollection<User> _registrars;
+        private ObservableCollection<Models.Component> _components;
+        private Models.Component _selectedComponent;
         private User _selectedRegistrar;
         private string _status;
         private decimal _amount;
         private decimal? _price;
         private DateTime? _date;
+        public decimal? _componentAmount;
         public event PropertyChangedEventHandler PropertyChanged;
         private const string ROLE_PHARMACIST = "pharmacist";
 
@@ -70,12 +74,24 @@ namespace PharmacyApp.ViewModel
             {
                 _selectedOrder = value;
                 OnPropertyChanged(nameof(SelectedOrder));
-                SelectedPrescription = value.Prescription;
-                SelectedMedication = value.Medication;
-                SelectedRegistrar = value.Registrar;
-                Status = value.Status;
-                Amount = value.Amount;
-                Price = value.Price;
+                if (value == null)
+                {
+                    SelectedPrescription = null;
+                    SelectedMedication = null;
+                    SelectedRegistrar = null;
+                    Status = null;
+                    Amount = 0;
+                    Price = 0;
+                }
+                else
+                {
+                    SelectedPrescription = value.Prescription;
+                    SelectedMedication = value.Medication;
+                    SelectedRegistrar = value.Registrar;
+                    Status = value.Status;
+                    Amount = value.Amount;
+                    Price = value.Price;
+                }
             }
         }
         public ObservableCollection<Prescription> Prescriptions
@@ -133,6 +149,33 @@ namespace PharmacyApp.ViewModel
             }
         }
         public ObservableCollection<string> OrderStatuses { get; }
+        public ObservableCollection<Models.Component> Components
+        {
+            get => _components;
+            set
+            {
+                _components = value;
+                OnPropertyChanged(nameof(Components));
+            }
+        }
+        public Models.Component SelectedComponent
+        {
+            get => _selectedComponent;
+            set
+            {
+                _selectedComponent = value;
+                OnPropertyChanged(nameof(SelectedComponent));
+            }
+        }
+        public decimal? ComponentAmount
+        {
+            get => _componentAmount;
+            set
+            {
+                _componentAmount = value;
+                OnPropertyChanged(nameof(ComponentAmount));
+            }
+        }
         public string Status
         {
             get => _status;
@@ -180,29 +223,33 @@ namespace PharmacyApp.ViewModel
             var medicationData = await _loadMethods.LoadMedicatonInfo();
             var userData = (await _loadMethods.LoadUserInfo()).Where(c => c.Role == ROLE_PHARMACIST);
             var prescriptionData = await _loadMethods.LoadPrescriptionInfo();
+            var componentsData = await _loadMethods.LoadComponentInfo();
             Application.Current.Dispatcher.Invoke(() =>
             {
                 Orders = new ObservableCollection<Order>(orderData);
                 Prescriptions = new ObservableCollection<Prescription>(prescriptionData);
                 Medications = new ObservableCollection<Medication>(medicationData);
                 Registrars = new ObservableCollection<User>(userData);
+                Components = new ObservableCollection<Models.Component>(componentsData);
             });
         }
         private async Task AddOrder()
         {
+            
             await _orderRepository.AddOrderItem(SelectedPrescription.PrescriptionId,SelectedMedication.MedicationId,Amount,
-                SelectedRegistrar.UserId, OrderDate, Status,Price);
+                SelectedRegistrar.UserId, OrderDate, Status,Price, SelectedComponent, ComponentAmount);
             await LoadData();
         }
         private async Task DeleteOrder()
         {
             await _orderRepository.DeleteOrderItem(SelectedOrder);
             await LoadData();
+        
         }
         private async Task UpdateOrder()
         {
             await _orderRepository.UpdateOrderItem(SelectedOrder, SelectedPrescription.PrescriptionId, SelectedMedication.MedicationId,
-                Amount, SelectedRegistrar.UserId, OrderDate, Status, Price);
+                Amount, SelectedRegistrar.UserId, OrderDate, Status, Price, SelectedComponent, ComponentAmount);
             await LoadData();
         }
         private void ClearFields()

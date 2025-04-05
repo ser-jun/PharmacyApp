@@ -9,9 +9,9 @@ public partial class PendingOrder
 
     public int OrderId { get; set; }
 
-    public int ComponentId { get; set; }
+    public int? ComponentId { get; set; }
 
-    public decimal RequiredAmount { get; set; }
+    public decimal? RequiredAmount { get; set; }
 
     public virtual Component Component { get; set; } = null!;
 

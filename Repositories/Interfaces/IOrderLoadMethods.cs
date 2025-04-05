@@ -12,6 +12,6 @@ namespace PharmacyApp.Repositories.Interfaces
         Task<IEnumerable<Prescription>> LoadPrescriptionInfo();
         Task<IEnumerable<Medication>> LoadMedicatonInfo();
         Task<IEnumerable<User>> LoadUserInfo();
-
+        Task<IEnumerable<Models.Component>> LoadComponentInfo();
     }
 }

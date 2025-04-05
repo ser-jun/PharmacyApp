@@ -11,9 +11,9 @@ namespace PharmacyApp.Repositories.Interfaces
     {
         Task<IEnumerable<Order>> LoadOrdersInfo();
         Task AddOrderItem(int prescriptionId, int medicationId, decimal amount, int registarId, DateTime? orderDate,
-            string status, decimal? price);
+            string status, decimal? price, Models.Component component, decimal? requiredAmount);
         Task DeleteOrderItem(Order orderToDelete);
         Task UpdateOrderItem(Order orderToUpdate, int newPrescriptionId, int newMedicationId, decimal newAmount, int newRegistratId,
-            DateTime? newOrderDate, string newStatus, decimal? newPrice);
+            DateTime? newOrderDate, string newStatus, decimal? newPrice, Models.Component? component, decimal? amount);
     }
 }
