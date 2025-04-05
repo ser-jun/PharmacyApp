@@ -269,7 +269,7 @@ public partial class PharmacyDbContext : DbContext
 
             entity.HasOne(d => d.Order).WithMany(p => p.PendingOrders)
                 .HasForeignKey(d => d.OrderId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("pending_orders_ibfk_1");
         });
 
@@ -298,9 +298,9 @@ public partial class PharmacyDbContext : DbContext
             entity.Property(e => e.IssueDate).HasColumnName("issue_date");
 
             entity.HasOne(d => d.Customer).WithMany(p => p.Prescriptions)
-                .HasForeignKey(d => d.CustomerId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("prescriptions_ibfk_1");
+        .HasForeignKey(d => d.CustomerId)
+        .OnDelete(DeleteBehavior.Cascade) 
+        .HasConstraintName("prescriptions_ibfk_1");
 
             entity.HasOne(d => d.Doctor).WithMany(p => p.Prescriptions)
                 .HasForeignKey(d => d.DoctorId)

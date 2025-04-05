@@ -11,7 +11,7 @@ public partial class Prescription
 
     public int DoctorId { get; set; }
 
-    public DateOnly IssueDate { get; set; }
+    public DateTime IssueDate { get; set; }
 
     public string? Diagnosis { get; set; }
 
