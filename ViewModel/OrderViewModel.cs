@@ -282,6 +282,10 @@ namespace PharmacyApp.ViewModel
                 Amount, SelectedRegistrar.UserId, OrderDate, Status, Price, SelectedComponent, ComponentAmount);
             await LoadData();
         }
+        private async Task LoadUnclamedOrder()
+        {
+           var data = await _loadMethods.LoadUnclamedOrders();
+        }
         private void ClearFields()
         {
             SelectedPrescription = null;

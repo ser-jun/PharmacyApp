@@ -1,4 +1,6 @@
-﻿using PharmacyApp.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using PharmacyApp.DTO;
+using PharmacyApp.Models;
 using PharmacyApp.Repositories.Interfaces;
 using System.Collections.ObjectModel;
 using System.Windows.Controls;
@@ -14,10 +16,12 @@ namespace PharmacyApp.Repositories
         private readonly ICrudRepository<User> _userRepository;
         private readonly ICrudRepository<Models.Component> _componentRepository;
         private readonly ICrudRepository<PendingOrder> _pendingOrderRepository;
+        private readonly PharmacyDbContext _context;
         private const string ORDER_STATUS = "Ожидает компонентов";
         private string statusBeforeUpdate;
         public OrderRepository(PharmacyDbContext context)
         {
+            _context = context;
             _crudOrderRepository = new CrudRepository<Order>(context);
             _prescriptionRepository = new CrudRepository<Prescription>(context);
             _medicationRepository = new CrudRepository<Medication>(context);
@@ -115,6 +119,11 @@ namespace PharmacyApp.Repositories
                     await _pendingOrderRepository.DeleteAsync(pendingOrder);
                 }
             }
+        }
+
+        private async Task<IEnumerable<UnclaimedOrdersDto>> LoadUnclamedOrders()
+        {
+            return await _context.Database.SqlQueryRaw<UnclaimedOrdersDto>("CALL GetUnclaimedOrdersWithStatistics()").ToListAsync();
         }
         public async Task<IEnumerable<Prescription>> LoadPrescriptionInfo()
         {

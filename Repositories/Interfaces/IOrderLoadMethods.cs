@@ -1,4 +1,5 @@
-﻿using PharmacyApp.Models;
+﻿using PharmacyApp.DTO;
+using PharmacyApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,5 +14,6 @@ namespace PharmacyApp.Repositories.Interfaces
         Task<IEnumerable<Medication>> LoadMedicatonInfo();
         Task<IEnumerable<User>> LoadUserInfo();
         Task<IEnumerable<Models.Component>> LoadComponentInfo();
+        Task<IEnumerable<UnclaimedOrdersDto>> LoadUnclamedOrders();
     }
 }

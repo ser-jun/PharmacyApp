@@ -41,7 +41,6 @@ namespace PharmacyApp.ViewModel
             {
                "Ожидает обработки",
                "Заказана у поставщика",
-               "Доставлена"
             };
             _ = LoadData();
         }
