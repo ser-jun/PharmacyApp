@@ -14,6 +14,5 @@ namespace PharmacyApp.Repositories.Interfaces
         Task<IEnumerable<Medication>> LoadMedicatonInfo();
         Task<IEnumerable<User>> LoadUserInfo();
         Task<IEnumerable<Models.Component>> LoadComponentInfo();
-        Task<IEnumerable<UnclaimedOrdersDto>> LoadUnclamedOrders();
     }
 }

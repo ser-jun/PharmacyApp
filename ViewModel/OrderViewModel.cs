@@ -18,6 +18,7 @@ namespace PharmacyApp.ViewModel
         public ICommand ClearCommand { get; }
         public ICommand OpenPendingOrderComponent { get; }
         public ICommand OpenSupplyRequestCommand {  get; }  
+        public ICommand OpenUncalmedWindowCommand { get; }
 
 
         private readonly IOrderRepository _orderRepository;
@@ -63,6 +64,7 @@ namespace PharmacyApp.ViewModel
             ClearCommand = new RelayCommand(ClearFields);
             OpenPendingOrderComponent = new RelayCommand(OpenPendingOrderInfo);
             OpenSupplyRequestCommand = new RelayCommand(OpenSupplyRequestWindow);
+            OpenUncalmedWindowCommand = new RelayCommand(OpenCustomerInfo);
         }
 
         public OrderViewModel(IPendingOrderRepository pendingOrderRepository, ICrudRepository<Models.Component> component)
@@ -282,10 +284,6 @@ namespace PharmacyApp.ViewModel
                 Amount, SelectedRegistrar.UserId, OrderDate, Status, Price, SelectedComponent, ComponentAmount);
             await LoadData();
         }
-        private async Task LoadUnclamedOrder()
-        {
-           var data = await _loadMethods.LoadUnclamedOrders();
-        }
         private void ClearFields()
         {
             SelectedPrescription = null;
@@ -307,6 +305,10 @@ namespace PharmacyApp.ViewModel
         private void OpenSupplyRequestWindow()
         {
             NavigationService.OpenForm<SupplyRequestWindow>();
+        }
+        private void OpenCustomerInfo()
+        {
+            NavigationService.OpenForm<InformationCustomerOrders>();
         }
 
     }

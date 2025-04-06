@@ -1,0 +1,60 @@
+﻿<Window x:Class="PharmacyApp.View.InformationCustomerOrders"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PharmacyApp.View"
+        mc:Ignorable="d"
+        Title="Информация о неполученных заказах" Height="450" Width="800">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+            
+            <ComboBox Width="200" Margin="0,0,10,0"
+                     ItemsSource="{Binding StatusFilter}"
+                     SelectedItem="{Binding SelectedStatusFilter}"
+                    />
+
+            <ComboBox Width="200" Margin="0,0,10,0"
+                     ItemsSource="{Binding MedicationCategories}"
+                     SelectedItem="{Binding SelectedMedicationCategory}"
+                     DisplayMemberPath="Name"
+                     SelectedValuePath="CategoryId"/>
+
+            <Button Content="Применить фильтр" 
+                    Command="{Binding ApplyFilterCommand}"
+                    Width="120" Margin="0,0,10,0"/>
+
+            <Button Content="Сбросить фильтр" 
+                    Command="{Binding ResetFilterCommand}"
+                    Width="120"/>
+        </StackPanel>
+
+
+        <DataGrid Grid.Row="1" 
+                 ItemsSource="{Binding FilteredOrders}"
+                 AutoGenerateColumns="False"
+                 CanUserAddRows="False"
+                 IsReadOnly="True"
+                 SelectionMode="Single">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ФИО пациента" Binding="{Binding CustomerName}" Width="*"/>
+                <DataGridTextColumn Header="Адрес" Binding="{Binding CustomerAddress}" Width="*"/>
+                <DataGridTextColumn Header="Медикамент" Binding="{Binding MedicationName}" Width="*"/>
+                <DataGridTextColumn Header="Дата заказа" Binding="{Binding OrderDate, StringFormat={}{0:dd.MM.yyyy}}" Width="*"/>
+                <DataGridTextColumn Header="Статус" Binding="{Binding OrderStatus}" Width="*"/>
+                <DataGridTextColumn Header="Количество заказов" Binding="{Binding UnclaimedOrdersCount}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+            <TextBlock Text="{Binding TotalCustomersWithUnclaimedOrders, StringFormat='Всего пациентов: {0}'}" 
+                      Margin="0,0,20,0" FontWeight="Bold"/>
+        </StackPanel>
+    </Grid>
+</Window>

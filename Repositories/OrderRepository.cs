@@ -7,7 +7,7 @@ using System.Windows.Controls;
 
 namespace PharmacyApp.Repositories
 {
-    public class OrderRepository : IOrderRepository, IOrderLoadMethods, IPendingOrderRepository
+    public class OrderRepository : IOrderRepository, IOrderLoadMethods, IPendingOrderRepository, ICustomerOrders
     {
 
         private readonly ICrudRepository<Order> _crudOrderRepository;
@@ -16,6 +16,7 @@ namespace PharmacyApp.Repositories
         private readonly ICrudRepository<User> _userRepository;
         private readonly ICrudRepository<Models.Component> _componentRepository;
         private readonly ICrudRepository<PendingOrder> _pendingOrderRepository;
+        private readonly ICrudRepository<MedicationCategory> _medicationCategoryRepository;
         private readonly PharmacyDbContext _context;
         private const string ORDER_STATUS = "Ожидает компонентов";
         private string statusBeforeUpdate;
@@ -28,6 +29,7 @@ namespace PharmacyApp.Repositories
             _userRepository = new CrudRepository<User>(context);
             _componentRepository = new CrudRepository<Models.Component>(context);
             _pendingOrderRepository = new CrudRepository<PendingOrder>(context);
+            _medicationCategoryRepository = new CrudRepository<MedicationCategory>(context);
         }
         public async Task<IEnumerable<Order>> LoadOrdersInfo()
         {
@@ -121,7 +123,7 @@ namespace PharmacyApp.Repositories
             }
         }
 
-        private async Task<IEnumerable<UnclaimedOrdersDto>> LoadUnclamedOrders()
+        public async Task<IEnumerable<UnclaimedOrdersDto>> LoadUnclamedOrders()
         {
             return await _context.Database.SqlQueryRaw<UnclaimedOrdersDto>("CALL GetUnclaimedOrdersWithStatistics()").ToListAsync();
         }
@@ -136,6 +138,17 @@ namespace PharmacyApp.Repositories
         public async Task<IEnumerable<User>> LoadUserInfo()
         {
             return await _userRepository.GetAllAsync();
+        }
+        public async Task<IEnumerable<UnclaimedOrdersDto>> LoadWaitingMedicationInfo(int? categoryId = null)
+        {
+            return await _context.Database
+         .SqlQuery<UnclaimedOrdersDto>(
+             $"CALL GetCustomersWaitingMedications({(categoryId.HasValue ? categoryId.ToString() : null)})")
+         .ToListAsync();
+        }
+        public async Task<IEnumerable<MedicationCategory>> LoadMedicationCategory()
+        {
+            return await _medicationCategoryRepository.GetAllAsync();
         }
         public async Task<IEnumerable<Models.Component>> LoadComponentInfo()
         {
