@@ -7,6 +7,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using PharmacyApp.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace PharmacyApp.Repositories
 {
@@ -15,46 +16,28 @@ namespace PharmacyApp.Repositories
         private readonly ICrudRepository<SupplyRequest> _supplyRequestCrudRepository;
         private readonly    IPendingOrderRepository _pendingOrderRepository;
         private readonly ICrudRepository<Models.Component> _crudComponentRepository;
+        private readonly PharmacyDbContext _context;
 
         public SupplyRequestRepository (PharmacyDbContext context)
         {
+            _context = context;
             _supplyRequestCrudRepository = new CrudRepository<SupplyRequest>(context);
             _pendingOrderRepository = new OrderRepository(context);
         }
         public async Task<IEnumerable<SupplyRequest>> LoadSupplyRequest()
         {
-            return await _supplyRequestCrudRepository.GetAllAsync();
+            return await _context.SupplyRequests
+                       .Include(sr => sr.Component) 
+                       .ToListAsync();
         }
-        public async Task AddSupplyRequestItem(int componentId, decimal amount, DateTime? time, string status)
-        {
-            var supllyRequest = new SupplyRequest
-            {
-                ComponentId = componentId,
-                RequestedAmount = amount,
-                RequestDate = time,
-                Status = status
-            };
-            await _supplyRequestCrudRepository.AddAsync(supllyRequest);
-        }
+
         public async Task DeleteSupplyRequestItem(SupplyRequest itemToDelete)
         {
             await _supplyRequestCrudRepository.DeleteAsync(itemToDelete);
         }
-        //public async Task<IEnumerable<PendingOrder>> LoadComponentInfo()
-        //{
-        //   //var pendingOrder=  await _pendingOrderRepository.LoadPendingOrderInfo(); 
-        //   // foreach (var component in pendingOrder)
-        //   // {
-        //   //     if (component.ComponentId.HasValue)
-        //   //     {
-        //   //         component.Component = await _crudComponentRepository.GetByIdAsync(component.ComponentId.Value);
-        //   //     }
-        //   // }
-        //   // return pendingOrder;
-        //}
-        public async Task UpdateSupplyRequestItem(SupplyRequest itemToUpdate, int newcomponentId, decimal newAmount, DateTime? newTime, string newStatus)
+
+        public async Task UpdateSupplyRequestItem(SupplyRequest itemToUpdate, decimal? newAmount, DateTime? newTime, string newStatus)
         {
-            itemToUpdate.ComponentId = newcomponentId;
             itemToUpdate.RequestedAmount = newAmount; 
             itemToUpdate.RequestDate = newTime; 
             itemToUpdate.Status = newStatus;

@@ -9,7 +9,7 @@ public partial class SupplyRequest
 
     public int ComponentId { get; set; }
 
-    public decimal RequestedAmount { get; set; }
+    public decimal? RequestedAmount { get; set; }
 
     public DateTime? RequestDate { get; set; }
 

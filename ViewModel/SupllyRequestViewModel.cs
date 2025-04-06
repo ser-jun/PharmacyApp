@@ -13,7 +13,6 @@ namespace PharmacyApp.ViewModel
 {
     public class SupllyRequestViewModel : INotifyPropertyChanged
     {
-        public ICommand AddCommand { get; }
         public ICommand UpdateCommand { get; }
         public ICommand DeleteCommand { get; }
         public ICommand ClearCommand { get; }
@@ -25,7 +24,7 @@ namespace PharmacyApp.ViewModel
         private SupplyRequest _selectedRequest;
         private ObservableCollection<Models.Component> _components;
         private Models.Component _selectedComponent;
-        private decimal _requestedAmount;
+        private decimal? _requestedAmount;
         private DateTime? _requestDate;
         private string _status;
         public ObservableCollection<string> Statuses { get; }
@@ -35,12 +34,16 @@ namespace PharmacyApp.ViewModel
         public SupllyRequestViewModel(ISupplyRequestRepository supllyRequestRepository)
         {
             _supplyRequestRepository = supllyRequestRepository;
+            UpdateCommand = new RelayCommand(async () => await UpdateItem());
+            DeleteCommand = new RelayCommand (async () => await DeleteItem());
+            ClearCommand = new RelayCommand(ClearFields);
             Statuses = new ObservableCollection<string>
             {
                "Ожидает обработки",
                "Заказана у поставщика",
                "Доставлена"
             };
+            _ = LoadData();
         }
 
         public ObservableCollection<SupplyRequest> SupplyRequests
@@ -62,32 +65,13 @@ namespace PharmacyApp.ViewModel
 
                 if (_selectedRequest != null)
                 {
-                    SelectedComponent = _selectedRequest.Component;
                     RequestedAmount = _selectedRequest.RequestedAmount;
                     RequestDate = _selectedRequest.RequestDate;
                     Status = _selectedRequest.Status;
                 }
             }
         }
-        public ObservableCollection<Models.Component> Components
-        {
-            get => _components;
-            set
-            {
-                _components = value;
-                OnPropertyChanged(nameof(Components));
-            }
-        }
-        public Models.Component SelectedComponent
-        {
-            get => _selectedComponent;
-            set
-            {
-                _selectedComponent = value;
-                OnPropertyChanged(nameof(SelectedComponent));
-            }
-        }
-        public decimal RequestedAmount
+        public decimal? RequestedAmount
         {
             get => _requestedAmount;
             set
@@ -115,15 +99,26 @@ namespace PharmacyApp.ViewModel
             }
         }
 
-        private async Task LoadComponent()
-        {
-            //var data = await _supplyRequestRepository.LoadComponentInfo();
-            //Components = new ObservableCollection<Models.Component>(data);
-        }
         private async Task LoadData()
         {
             var data = await _supplyRequestRepository.LoadSupplyRequest();
             SupplyRequests = new ObservableCollection<SupplyRequest>(data);
+        }
+        private async Task UpdateItem()
+        {
+            await _supplyRequestRepository.UpdateSupplyRequestItem(SelectedRequest, RequestedAmount, RequestDate, Status);
+            await LoadData();
+        }
+        private async Task DeleteItem()
+        {
+            await _supplyRequestRepository.DeleteSupplyRequestItem(SelectedRequest);
+            await LoadData();
+        }
+        private void ClearFields()
+        {
+            RequestedAmount = null;
+            RequestDate = DateTime.Now;
+            Status = null;
         }
         protected virtual void OnPropertyChanged(string propertyName)
         {

@@ -398,7 +398,7 @@ public partial class PharmacyDbContext : DbContext
                 .HasColumnName("request_date");
             entity.Property(e => e.RequestedAmount)
                 .HasPrecision(10, 3)
-                .HasColumnName("requested_amount");
+                .HasColumnName("requested_amount").IsRequired(false);
             entity.Property(e => e.Status)
                 .HasDefaultValueSql("'Ожидает обработки'")
                 .HasColumnType("enum('Ожидает обработки','Заказана у поставщика','Доставлена')")

@@ -17,6 +17,7 @@ namespace PharmacyApp.ViewModel
         public ICommand DeleteCommand { get; }
         public ICommand ClearCommand { get; }
         public ICommand OpenPendingOrderComponent { get; }
+        public ICommand OpenSupplyRequestCommand {  get; }  
 
 
         private readonly IOrderRepository _orderRepository;
@@ -61,6 +62,7 @@ namespace PharmacyApp.ViewModel
             DeleteCommand = new RelayCommand(async () => await DeleteOrder());
             ClearCommand = new RelayCommand(ClearFields);
             OpenPendingOrderComponent = new RelayCommand(OpenPendingOrderInfo);
+            OpenSupplyRequestCommand = new RelayCommand(OpenSupplyRequestWindow);
         }
 
         public OrderViewModel(IPendingOrderRepository pendingOrderRepository, ICrudRepository<Models.Component> component)
@@ -297,6 +299,10 @@ namespace PharmacyApp.ViewModel
         private void OpenPendingOrderInfo()
         {
             NavigationService.OpenForm<PendingOrderWindow>();
+        }
+        private void OpenSupplyRequestWindow()
+        {
+            NavigationService.OpenForm<SupplyRequestWindow>();
         }
 
     }
