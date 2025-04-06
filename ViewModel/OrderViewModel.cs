@@ -270,7 +270,7 @@ namespace PharmacyApp.ViewModel
         }
         private async Task DeleteOrder()
         {
-            await _orderRepository.DeleteOrderItem(SelectedOrder);
+            await _orderRepository.DeleteOrderItem(SelectedOrder); 
             await LoadData();
         
         }

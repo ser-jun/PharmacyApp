@@ -1,0 +1,81 @@
+﻿<Window x:Class="PharmacyApp.View.SupplyRequestWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PharmacyApp.View"
+        mc:Ignorable="d"
+        Title="Управление заявками на поставку" 
+        Height="550" 
+        Width="900"
+        WindowStartupLocation="CenterOwner">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <GroupBox Grid.Row="0" Header="Данные заявки" Margin="0,0,0,10">
+            <Grid Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="0" Content="Компонент:" VerticalAlignment="Center"/>
+                <ComboBox Grid.Row="0" Grid.Column="1" Margin="5"
+                          ItemsSource="{Binding Components}"
+                          DisplayMemberPath="Name"
+                          SelectedValue="{Binding SelectedComponent}"
+                          SelectedValuePath="ComponentId"/>
+
+                <Label Grid.Row="0" Grid.Column="2" Content="Количество:" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="0" Grid.Column="3" Margin="5"
+                         Text="{Binding RequestedAmount, StringFormat={}{0:N3}}"/>
+
+                <Label Grid.Row="1" Grid.Column="0" Content="Дата:" VerticalAlignment="Center"/>
+                <DatePicker Grid.Row="1" Grid.Column="1" Margin="5"
+                            SelectedDate="{Binding RequestDate}"/>
+
+                <Label Grid.Row="1" Grid.Column="2" Content="Статус:" VerticalAlignment="Center"/>
+                <ComboBox Grid.Row="1" Grid.Column="3" Margin="5"
+                          ItemsSource="{Binding Statuses}"
+                          SelectedItem="{Binding Status}"/>
+            </Grid>
+        </GroupBox>
+
+        <DataGrid Grid.Row="2" 
+                  ItemsSource="{Binding SupplyRequests}"
+                  SelectedItem="{Binding SelectedRequest}"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Компонент" Binding="{Binding Component.Name}" Width="*"/>
+                <DataGridTextColumn Header="Количество" 
+                                    Binding="{Binding RequestedAmount, StringFormat={}{0:N3}}" 
+                                    Width="Auto"/>
+                <DataGridTextColumn Header="Дата заявки" 
+                                    Binding="{Binding RequestDate, StringFormat={}{0:dd.MM.yyyy}}" 
+                                    Width="Auto"/>
+                <DataGridTextColumn Header="Статус" Binding="{Binding Status}" Width="Auto"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+            <Button Content="Добавить" Command="{Binding AddCommand}" Width="100" Margin="0,0,10,0"/>
+            <Button Content="Редактировать" Command="{Binding UpdateCommand}" Width="100" Margin="0,0,10,0"/>
+            <Button Content="Удалить" Command="{Binding DeleteCommand}" Width="100" Margin="0,0,10,0"/>
+            <Button Content="Очистить" Command="{Binding ClearCommand}" Width="100"/>
+        </StackPanel>
+    </Grid>
+</Window>

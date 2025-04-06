@@ -136,7 +136,7 @@ namespace PharmacyApp.Repositories
         {
             var pendingOrders = await _pendingOrderRepository.GetAllAsync();
             foreach (var order in pendingOrders)
-            {
+            { 
                 if(order.ComponentId.HasValue)
                 {
                     order.Component = await _componentRepository.GetByIdAsync(order.ComponentId.Value);
