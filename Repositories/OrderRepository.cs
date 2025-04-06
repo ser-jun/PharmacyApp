@@ -1,9 +1,11 @@
 ﻿using PharmacyApp.Models;
 using PharmacyApp.Repositories.Interfaces;
+using System.Collections.ObjectModel;
+using System.Windows.Controls;
 
 namespace PharmacyApp.Repositories
 {
-    public class OrderRepository : IOrderRepository, IOrderLoadMethods
+    public class OrderRepository : IOrderRepository, IOrderLoadMethods, IPendingOrderRepository
     {
 
         private readonly ICrudRepository<Order> _crudOrderRepository;
@@ -129,6 +131,18 @@ namespace PharmacyApp.Repositories
         public async Task<IEnumerable<Models.Component>> LoadComponentInfo()
         {
             return await _componentRepository.GetAllAsync();
+        }
+        public async Task<IEnumerable<PendingOrder>> LoadPendingOrderInfo()
+        {
+            var pendingOrders = await _pendingOrderRepository.GetAllAsync();
+            foreach (var order in pendingOrders)
+            {
+                if(order.ComponentId.HasValue)
+                {
+                    order.Component = await _componentRepository.GetByIdAsync(order.ComponentId.Value);
+                }
+            }
+            return pendingOrders;
         }
     }
 }

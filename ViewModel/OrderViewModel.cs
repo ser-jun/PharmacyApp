@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using PharmacyApp.Models;
 using PharmacyApp.Repositories.Interfaces;
+using PharmacyApp.View;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
@@ -14,10 +16,13 @@ namespace PharmacyApp.ViewModel
         public ICommand UpdateCommand { get; }
         public ICommand DeleteCommand { get; }
         public ICommand ClearCommand { get; }
+        public ICommand OpenPendingOrderComponent { get; }
 
 
         private readonly IOrderRepository _orderRepository;
         private readonly IOrderLoadMethods _loadMethods;
+        private readonly IPendingOrderRepository _pendingOrderRepository;
+        private readonly ICrudRepository<Models.Component> _crudRepository;
 
         private ObservableCollection<Order> _orders;
         private Order _selectedOrder;
@@ -28,6 +33,7 @@ namespace PharmacyApp.ViewModel
         private ObservableCollection<User> _registrars;
         private ObservableCollection<Models.Component> _components;
         private Models.Component _selectedComponent;
+        private ObservableCollection<PendingOrder> _pendingOrders;
         private User _selectedRegistrar;
         private string _status;
         private decimal _amount;
@@ -36,7 +42,6 @@ namespace PharmacyApp.ViewModel
         public decimal? _componentAmount;
         public event PropertyChangedEventHandler PropertyChanged;
         private const string ROLE_PHARMACIST = "pharmacist";
-
         public OrderViewModel(IOrderRepository orderRepository, IOrderLoadMethods orderLoadsMethods)
         {
             _orderRepository = orderRepository;
@@ -55,9 +60,26 @@ namespace PharmacyApp.ViewModel
             UpdateCommand = new RelayCommand(async () => await UpdateOrder());
             DeleteCommand = new RelayCommand(async () => await DeleteOrder());
             ClearCommand = new RelayCommand(ClearFields);
+            OpenPendingOrderComponent = new RelayCommand(OpenPendingOrderInfo);
         }
 
+        public OrderViewModel(IPendingOrderRepository pendingOrderRepository, ICrudRepository<Models.Component> component)
+        {
+            _pendingOrderRepository = pendingOrderRepository;
+            _crudRepository = component;
+            _ = LoadPendingOrder();
+
+        }
         #region Properties
+        public ObservableCollection<PendingOrder> PendingOrders
+        {
+            get=> _pendingOrders;
+            set
+            {
+                _pendingOrders = value;
+                OnPropertyChanged(nameof(PendingOrders));
+            }
+        }
         public ObservableCollection<Order> Orders
         {
             get => _orders;
@@ -224,6 +246,7 @@ namespace PharmacyApp.ViewModel
             var userData = (await _loadMethods.LoadUserInfo()).Where(c => c.Role == ROLE_PHARMACIST);
             var prescriptionData = await _loadMethods.LoadPrescriptionInfo();
             var componentsData = await _loadMethods.LoadComponentInfo();
+            
             Application.Current.Dispatcher.Invoke(() =>
             {
                 Orders = new ObservableCollection<Order>(orderData);
@@ -232,6 +255,11 @@ namespace PharmacyApp.ViewModel
                 Registrars = new ObservableCollection<User>(userData);
                 Components = new ObservableCollection<Models.Component>(componentsData);
             });
+        }
+        private async Task LoadPendingOrder()
+        {
+            var pendingOrders = await _pendingOrderRepository.LoadPendingOrderInfo();
+            PendingOrders = new ObservableCollection<PendingOrder>(pendingOrders);
         }
         private async Task AddOrder()
         {
@@ -265,6 +293,10 @@ namespace PharmacyApp.ViewModel
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        private void OpenPendingOrderInfo()
+        {
+            NavigationService.OpenForm<PendingOrderWindow>();
         }
 
     }
