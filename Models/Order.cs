@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace PharmacyApp.Models;
 
 public partial class Order
 {
+    
     public int OrderId { get; set; }
 
     public int PrescriptionId { get; set; }

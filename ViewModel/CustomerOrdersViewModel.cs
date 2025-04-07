@@ -15,10 +15,15 @@ namespace PharmacyApp.ViewModel
     public class CustomerOrdersViewModel : INotifyPropertyChanged
     {
         public ICommand ApplyFilterCommand { get; }
+        public ICommand ResetFilterCommand { get; }
+
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly ICustomerOrders _customerOrdersRepository;
         public ObservableCollection<string> StatusFilter { get; }
         private ObservableCollection<UnclaimedOrdersDto> _unclamedOrders;
+        private ObservableCollection<MedicationCategory> _medicationCategories;
+        private MedicationCategory _selectedMedicationCategory;
+
         private string _selectedStatusFilter;
         private const string UNCLAMED = "Не пришли забрать заказ";
         private const string NEED_IT = "В ожидании";
@@ -32,6 +37,7 @@ namespace PharmacyApp.ViewModel
                 "В ожидании"
             };
             ApplyFilterCommand = new RelayCommand(async () => await LoadData());
+            ResetFilterCommand = new RelayCommand(ClearFilters);
             _ = InitializeCategoryCollection();
         }
         public int TotalCustomersWithUnclaimedOrders
@@ -46,7 +52,6 @@ namespace PharmacyApp.ViewModel
                 }
             }
         }
-        private ObservableCollection<MedicationCategory> _medicationCategories;
         public ObservableCollection<MedicationCategory> MedicationCategories
         {
             get => _medicationCategories;
@@ -56,8 +61,6 @@ namespace PharmacyApp.ViewModel
                 OnPropertyChanged(nameof(MedicationCategories));
             }
         }
-
-        private MedicationCategory _selectedMedicationCategory;
         public MedicationCategory SelectedMedicationCategory
         {
             get => _selectedMedicationCategory;
@@ -100,6 +103,11 @@ namespace PharmacyApp.ViewModel
                 FilteredOrders = new ObservableCollection<UnclaimedOrdersDto>(data);
                 UpdateStatistics(data);
             }
+        }
+        private void ClearFilters()
+        {
+            SelectedStatusFilter = null;
+            SelectedMedicationCategory = null;
         }
         private async Task InitializeCategoryCollection()
         {

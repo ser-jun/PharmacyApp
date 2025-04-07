@@ -15,6 +15,7 @@
                     Orientation="Horizontal" 
                     HorizontalAlignment="Right"
                     Margin="5">
+            <TextBox Text="{Binding SearchField, UpdateSourceTrigger=PropertyChanged}" Width="100" Margin="5 0"/>
             <Button Content="Удалить" Command="{Binding DeleteItemCommand}" Padding="10 5" MinWidth="80" Margin="5 0"/>
             <Button Content="Изменить" Command="{Binding EditItemCommand}" Padding="10 5" MinWidth="80" Margin="5 0"/>
             <Button Content="Добавить" Command="{Binding OpenAddWindowCommand}" Padding="10 5" MinWidth="80" Margin="5 0"/>

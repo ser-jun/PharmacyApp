@@ -19,6 +19,8 @@ namespace PharmacyApp.ViewModel
         public ICommand OpenPendingOrderComponent { get; }
         public ICommand OpenSupplyRequestCommand {  get; }  
         public ICommand OpenUncalmedWindowCommand { get; }
+        public ICommand ApplyFilterCommand { get; } 
+        public ICommand ResetFilter { get; }
 
 
         private readonly IOrderRepository _orderRepository;
@@ -65,6 +67,7 @@ namespace PharmacyApp.ViewModel
             OpenPendingOrderComponent = new RelayCommand(OpenPendingOrderInfo);
             OpenSupplyRequestCommand = new RelayCommand(OpenSupplyRequestWindow);
             OpenUncalmedWindowCommand = new RelayCommand(OpenCustomerInfo);
+            ApplyFilterCommand = new RelayCommand(async () => await LoadInProcessOrder());
         }
 
         public OrderViewModel(IPendingOrderRepository pendingOrderRepository, ICrudRepository<Models.Component> component)
@@ -265,6 +268,11 @@ namespace PharmacyApp.ViewModel
             var pendingOrders = await _pendingOrderRepository.LoadPendingOrderInfo();
             PendingOrders = new ObservableCollection<PendingOrder>(pendingOrders);
         }
+        private async Task LoadInProcessOrder()
+        {
+            var data = await _loadMethods.LoadOrderInProcess();
+            Orders = new ObservableCollection<Order>(data);
+        }
         private async Task AddOrder()
         {
             
@@ -293,7 +301,9 @@ namespace PharmacyApp.ViewModel
             Amount = 0;
             Price = 0;
             OrderDate = DateTime.Now;
+            LoadData();
         }
+
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

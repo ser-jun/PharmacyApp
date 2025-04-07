@@ -15,5 +15,6 @@ namespace PharmacyApp.Repositories.Interfaces
         Task DeleteItem(int ComponentId);
         Task UpdateItem(int componentId, int stockId, string newName, string newUnitMesuare, decimal newAmount,
     decimal newCriticalNorm, DateTime newArriveData, int newShelfLife);
+        Task<IEnumerable<StockItems>> GetFilteredDataByShelfLife();
     }
 }

@@ -5,6 +5,7 @@ using PharmacyApp.Repositories.Interfaces;
 using PharmacyApp.View;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows;
 using System.Windows.Input;
 
 namespace PharmacyApp.ViewModel
@@ -19,6 +20,7 @@ namespace PharmacyApp.ViewModel
         public event PropertyChangedEventHandler PropertyChanged;
         private ObservableCollection<MedicationsItems> _medications;
         private MedicationsItems _selectedMedication;
+        private string _searchField;
         public MedicationsViewModel(IMedicationsRepository medicationsRepository)
         {
             _medicationsRepository = medicationsRepository;
@@ -45,6 +47,19 @@ namespace PharmacyApp.ViewModel
                 OnPropertyChanged(nameof(SelectedMedication));
             }
         }
+        public string SearchField
+        {
+            get => _searchField;
+            set
+            {
+                if (SearchField != value)
+                {
+                _searchField = value;
+                OnPropertyChanged(nameof(SearchField));
+                   _=SearchByName();
+                }
+            }
+        }
         private async Task LoadMedications()
         {
             var data = await _medicationsRepository.LoadMedicationsInfo();
@@ -55,7 +70,11 @@ namespace PharmacyApp.ViewModel
             await _medicationsRepository.DeleteMedicationItem(SelectedMedication.MedicationId);
             await LoadMedications();
         }
-
+        private async Task SearchByName()
+        {
+            var data = await _medicationsRepository.SearchMedicationByName(SearchField);
+            Medications = new ObservableCollection<MedicationsItems>(data);
+        }
         private void OpenFormToAdd()
         {
             var addWindow = NavigationService.OpenForm<AddMedicationWindow>();

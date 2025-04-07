@@ -12,6 +12,8 @@ namespace PharmacyApp.Repositories.Interfaces
     {
         Task<IEnumerable<MedicationsItems>> LoadMedicationsInfo();
         Task DeleteMedicationItem(int medicationId);
-        
+        Task<IEnumerable<MedicationsItems>> SearchMedicationByName(string name);
+
+
     }
 }

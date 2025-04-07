@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PharmacyApp.DTO;
+﻿using PharmacyApp.DTO;
 using PharmacyApp.Models;
 using PharmacyApp.Repositories.Interfaces;
 using System.Collections.ObjectModel;
@@ -19,6 +18,7 @@ namespace PharmacyApp.ViewModel
         public ICommand UpdateCommand { get; }
         public ICommand DeleteCommand { get; }
         public ICommand ClearCommand { get; }
+        public ICommand ApplyFilter { get; }
 
         private ObservableCollection<SupplierDto> _suppliers;
         private ObservableCollection<Models.Component> _allcomponents;
@@ -31,6 +31,8 @@ namespace PharmacyApp.ViewModel
         private sbyte _rating;
         private int _deliveryTimeDays;
         private int _componentId;
+        private byte? _filterRating;
+        private string _searchFiled;
         public SupplierViewModel(ISupplierRepository supplierRepository, ICrudRepository<Models.Component> crudComponent, PharmacyDbContext context)
         {
             _supplierRepository = supplierRepository;
@@ -40,6 +42,7 @@ namespace PharmacyApp.ViewModel
             DeleteCommand = new RelayCommand(async () => await DeleteSupplier());
             UpdateCommand = new RelayCommand(async () => await Updatesupplier());
             ClearCommand = new RelayCommand(ClearFields);
+            ApplyFilter = new RelayCommand(async () => await LoadFilteredInfoByRatinOrComponent());
             LoadData().ConfigureAwait(false);
         }
         public ObservableCollection<SupplierDto> Suppliers
@@ -133,6 +136,30 @@ namespace PharmacyApp.ViewModel
                 OnPropertyChanged(nameof(ComponentId));
             }
         }
+        public byte? FilterRating
+        {
+            get => _filterRating;
+            set
+            {
+                _filterRating = value;
+                OnPropertyChanged(nameof(FilterRating));
+            }
+        }
+        public string SearchFiled
+        {
+            get => _searchFiled;
+            set
+            {
+                if (SearchFiled != value)
+                {
+
+                    _searchFiled = value;
+                    OnPropertyChanged(nameof(SearchFiled));
+                    _ = SearchByName();
+                }
+
+            }
+        }
         private async Task LoadData()
         {
             try
@@ -178,6 +205,13 @@ namespace PharmacyApp.ViewModel
                 })
                 .ToList();
         }
+        private List<int> GetSelectedComponentIds()
+        {
+            return AllComponents
+                .Where(c => c.IsSelected)
+                .Select(c => c.ComponentId)
+                .ToList();
+        }
 
         private async Task DeleteSupplier()
         {
@@ -206,10 +240,12 @@ namespace PharmacyApp.ViewModel
             Email = null;
             Rating = 0;
             DeliveryTimeDays = 0;
+            FilterRating = 0;
             foreach (var component in AllComponents)
             {
                 component.IsSelected = false;
             }
+            LoadData();
 
         }
         private void FillFields()
@@ -222,6 +258,12 @@ namespace PharmacyApp.ViewModel
             ComponentId = SelectedSupplier.ComponentId;
             DeliveryTimeDays = SelectedSupplier.DeliveryTimeDays;
             MarkSelectedComponents();
+        }
+        private async Task LoadFilteredInfoByRatinOrComponent()
+        {
+            var selectedIds = GetSelectedComponentIds();
+            var data = await _supplierRepository.FilterByRatingOrComponent(selectedIds.Any() ? selectedIds : null, FilterRating);
+            Suppliers = new ObservableCollection<SupplierDto>(data);
         }
         private void MarkSelectedComponents()
         {
@@ -238,6 +280,18 @@ namespace PharmacyApp.ViewModel
             foreach (var component in AllComponents)
             {
                 component.IsSelected = supplierComponents.Contains(component.ComponentId);
+            }
+        }
+        private async Task SearchByName()
+        {
+            if (SearchFiled != string.Empty)
+            {
+            var data = await _supplierRepository.SearchByName(SearchFiled.Trim().ToLower());
+            Suppliers = new ObservableCollection<SupplierDto>(data);
+            }
+            else
+            {
+                await LoadData();
             }
         }
         protected virtual void OnPropertyChanged(string propertyName)

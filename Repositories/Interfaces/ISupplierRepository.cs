@@ -16,5 +16,7 @@ namespace PharmacyApp.Repositories.Interfaces
         Task DeleteSupplierItem(int supplierId);
         Task UpdateSupplierItem(int supplierId, string name, string? contactPerson, string phone, string email, sbyte rating,
         int? deliveryTime, List<Component> supplierComponents);
+        Task<IEnumerable<SupplierDto>> FilterByRatingOrComponent(List<int> components, byte? rating);
+        Task<IEnumerable<SupplierDto>> SearchByName(string name);
     }
 }

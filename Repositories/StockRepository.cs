@@ -67,5 +67,10 @@ namespace PharmacyApp.Repositories
             await _crudStock.UpdateAsync(stockItem);
 
         }
+
+        public async Task<IEnumerable<StockItems>> GetFilteredDataByShelfLife()
+        {
+            return await _context.Database.SqlQueryRaw<StockItems>("CALL GetExpiringComponents()").ToListAsync();   
+        }
     }
 }

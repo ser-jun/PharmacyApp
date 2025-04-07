@@ -79,6 +79,22 @@ namespace PharmacyApp.Repositories
                 await _crudSupplierComponent.AddAsync(supplierComponent);
             }
         }
+        public async Task<IEnumerable<SupplierDto>> FilterByRatingOrComponent(List<int> components, byte? rating)
+        {
+            string componentIdsString = components != null && components.Any()
+                ? string.Join(",", components)
+                : null;
+
+            return await _context.Database.SqlQueryRaw<SupplierDto>(
+                "CALL GetRatedSuppliersForComponents({0}, {1})",
+                componentIdsString ?? (object)DBNull.Value,
+                rating ?? (object)DBNull.Value)
+                .ToListAsync();
+        }
+        public async Task<IEnumerable<SupplierDto>> SearchByName(string name)
+        {
+            return await _context.Database.SqlQueryRaw<SupplierDto>("CALL SearchSuppliers({0})", name).ToListAsync();
+        }
     }
 }
  

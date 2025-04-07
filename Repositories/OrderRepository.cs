@@ -150,6 +150,56 @@ namespace PharmacyApp.Repositories
         {
             return await _medicationCategoryRepository.GetAllAsync();
         }
+        public async Task<IEnumerable<Order>> LoadOrderInProcess()
+        {
+            var orders = await _context.Orders
+                .FromSqlRaw("CALL GetManufacturingOrders()")
+                .AsNoTracking() 
+                .ToListAsync();
+
+            var orderIds = orders.Select(o => o.OrderId).ToList();
+            var prescriptionIds = orders.Select(o => o.PrescriptionId).Distinct().ToList();
+            var medicationIds = orders.Select(o => o.MedicationId).Distinct().ToList();
+            var registrarIds = orders.Select(o => o.RegistrarId).Distinct().ToList();
+
+            var prescriptions = await _context.Prescriptions
+                .Where(p => prescriptionIds.Contains(p.PrescriptionId))
+                .ToDictionaryAsync(p => p.PrescriptionId);
+
+            var medications = await _context.Medications
+                .Where(m => medicationIds.Contains(m.MedicationId))
+                .ToDictionaryAsync(m => m.MedicationId);
+
+            var registrars = await _context.Users
+                .Where(u => registrarIds.Contains(u.UserId))
+                .ToDictionaryAsync(u => u.UserId);
+
+            var pendingOrders = await _context.PendingOrders
+                .Where(po => orderIds.Contains(po.OrderId))
+                .Include(po => po.Component)
+                .ToListAsync();
+
+            var pendingOrdersDict = pendingOrders
+                .GroupBy(po => po.OrderId)
+                .ToDictionary(g => g.Key, g => g.ToList());
+
+            foreach (var order in orders)
+            {
+                if (prescriptions.TryGetValue(order.PrescriptionId, out var prescription))
+                    order.Prescription = prescription;
+
+                if (medications.TryGetValue(order.MedicationId, out var medication))
+                    order.Medication = medication;
+
+                if (registrars.TryGetValue(order.RegistrarId, out var registrar))
+                    order.Registrar = registrar;
+
+                if (pendingOrdersDict.TryGetValue(order.OrderId, out var pendingForOrder))
+                    order.PendingOrders = new Collection<PendingOrder>(pendingForOrder);
+            }
+
+            return orders;
+        }
         public async Task<IEnumerable<Models.Component>> LoadComponentInfo()
         {
             return await _componentRepository.GetAllAsync();

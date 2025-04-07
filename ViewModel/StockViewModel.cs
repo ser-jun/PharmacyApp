@@ -13,6 +13,7 @@ namespace PharmacyApp.ViewModel
         public ICommand UpdateCommand { get; }
         public ICommand DeleteCommand { get; }
         public ICommand ClearCommand { get; }
+        public ICommand ApplyFilterCommand { get; }
 
         private IstockRepository _stockRepository;
         private StockItems _selectedItem;
@@ -34,7 +35,8 @@ namespace PharmacyApp.ViewModel
             DeleteCommand = new RelayCommand(async () => await DeleteStockComponent());
             UpdateCommand = new RelayCommand(async () => await UpdateStockComponent());
             ClearCommand = new RelayCommand(ClearTextBoxs);
-            _=LoadData();
+            ApplyFilterCommand = new RelayCommand(async() => await FilterByShelfLife());
+            _ =LoadData();
         }
 
         public ObservableCollection<StockItems> StockItems
@@ -153,9 +155,14 @@ namespace PharmacyApp.ViewModel
             CriticalNorm = 0;
             ArrivalDate = DateTime.Now;
             ShelfLife = 0;
+            LoadData();
 
         }
-
+        private async Task FilterByShelfLife()
+        {
+            var data = await _stockRepository.GetFilteredDataByShelfLife();
+            StockItems = new ObservableCollection<StockItems>(data);  
+        }
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

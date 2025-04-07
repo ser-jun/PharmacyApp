@@ -50,6 +50,7 @@
         </GroupBox>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 0 10">
+            <Button Content="По Сроку годности" Command="{Binding ApplyFilterCommand}" Width="100" Margin="5"/>
             <Button Content="Добавить" Command="{Binding AddCommand}" Width="100" Margin="5"/>
             <Button Content="Изменить" Command="{Binding UpdateCommand}" Width="100" Margin="5"/>
             <Button Content="Удалить" Command="{Binding DeleteCommand}" Width="100" Margin="5"/>
