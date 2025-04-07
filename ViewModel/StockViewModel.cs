@@ -14,6 +14,7 @@ namespace PharmacyApp.ViewModel
         public ICommand DeleteCommand { get; }
         public ICommand ClearCommand { get; }
         public ICommand ApplyFilterCommand { get; }
+        public ICommand ApllyExpiredComponentsCommand { get; }
 
         private IstockRepository _stockRepository;
         private StockItems _selectedItem;
@@ -36,6 +37,7 @@ namespace PharmacyApp.ViewModel
             UpdateCommand = new RelayCommand(async () => await UpdateStockComponent());
             ClearCommand = new RelayCommand(ClearTextBoxs);
             ApplyFilterCommand = new RelayCommand(async() => await FilterByShelfLife());
+            ApllyExpiredComponentsCommand = new RelayCommand(async () => await FilteredByExpiredComponents());
             _ =LoadData();
         }
 
@@ -162,6 +164,11 @@ namespace PharmacyApp.ViewModel
         {
             var data = await _stockRepository.GetFilteredDataByShelfLife();
             StockItems = new ObservableCollection<StockItems>(data);  
+        }
+        private async Task FilteredByExpiredComponents()
+        {
+            var data = await _stockRepository.GetExpiredComponents();
+            StockItems = new ObservableCollection<StockItems>(data);
         }
         protected virtual void OnPropertyChanged(string propertyName)
         {
