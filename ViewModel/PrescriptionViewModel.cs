@@ -1,5 +1,6 @@
 ﻿using PharmacyApp.Models;
 using PharmacyApp.Repositories.Interfaces;
+using PharmacyApp.View;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
@@ -13,6 +14,7 @@ namespace PharmacyApp.ViewModel
         public ICommand UpdateCommand { get; }
         public ICommand DeleteCommand { get; }
         public ICommand ClearCommand { get; }
+        public ICommand GoBackCommand { get; }  
 
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly IPrescriptionrepository _prescriptionRepository;
@@ -40,6 +42,7 @@ namespace PharmacyApp.ViewModel
             DeleteCommand = new RelayCommand(async () => await DeletePrescription());
             UpdateCommand = new RelayCommand(async () => await UpdatePrescription());
             ClearCommand = new RelayCommand(ClearFields);
+            GoBackCommand = new RelayCommand(GoMainMenu);
             _ = InitializeAsync();
         }
 
@@ -186,6 +189,10 @@ namespace PharmacyApp.ViewModel
         {
             await _prescriptionRepository.DeletePrescritionItem(SelectedPrescription);
             await LoadData();
+        }
+        private void GoMainMenu()
+        {
+            NavigationService.OpenWindow<MainMenu>();
         }
 
         protected virtual void OnPropertyChanged(string propertyName)

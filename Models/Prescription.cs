@@ -9,7 +9,7 @@ public partial class Prescription
 
     public int CustomerId { get; set; }
 
-    public int DoctorId { get; set; }
+    public int? DoctorId { get; set; }
 
     public DateTime IssueDate { get; set; }
 

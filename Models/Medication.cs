@@ -11,9 +11,9 @@ public partial class Medication
 
     public string Name { get; set; } = null!;
 
-    public int TypeId { get; set; }
+    public int? TypeId { get; set; }
 
-    public int CategoryId { get; set; }
+    public int? CategoryId { get; set; }
 
     public bool? IsReadyMade { get; set; }
 

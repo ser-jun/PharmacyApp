@@ -96,8 +96,8 @@ namespace PharmacyApp.ViewModel
         }
         private void FillTextBoxs()
         {
-            Name = SelectedCategory.Name;
-            Description = SelectedCategory.Description;
+            //Name = SelectedCategory.Name;
+            //Description = SelectedCategory.Description;
         }
         private void ClearTextBoxs()
         {

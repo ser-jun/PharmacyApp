@@ -100,8 +100,8 @@ namespace PharmacyApp.ViewModel
         }
         private void FillTextBoxs()
         {
-            Name = SelectedType.Name;
-            SelectedApplicationMethod = SelectedType.ApplicationMethod;
+            //Name = SelectedType.Name;
+            //SelectedApplicationMethod = SelectedType.ApplicationMethod;
         }
         private void ClearTextBoxs()
         {

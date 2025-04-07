@@ -118,31 +118,42 @@ public partial class PharmacyDbContext : DbContext
             entity.ToTable("medications");
 
             entity.HasIndex(e => e.CategoryId, "category_id");
-
             entity.HasIndex(e => e.TypeId, "type_id");
 
             entity.Property(e => e.MedicationId).HasColumnName("medication_id");
-            entity.Property(e => e.CategoryId).HasColumnName("category_id");
+
+            entity.Property(e => e.TypeId)
+                .HasColumnName("type_id")
+                .IsRequired(false); 
+
+            entity.Property(e => e.CategoryId)
+                .HasColumnName("category_id")
+                .IsRequired(false);
+
             entity.Property(e => e.IsReadyMade)
-                .HasDefaultValueSql("'0'")
+                .HasDefaultValue(false)
                 .HasColumnName("is_ready_made");
+
             entity.Property(e => e.Name)
                 .HasMaxLength(100)
+                .IsRequired()
                 .HasColumnName("name");
+
             entity.Property(e => e.Price)
                 .HasPrecision(10, 2)
                 .HasColumnName("price");
-            entity.Property(e => e.TypeId).HasColumnName("type_id");
 
-            entity.HasOne(d => d.Category).WithMany(p => p.Medications)
-                .HasForeignKey(d => d.CategoryId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("medications_ibfk_2");
-
-            entity.HasOne(d => d.Type).WithMany(p => p.Medications)
+            entity.HasOne(d => d.Type)
+                .WithMany(p => p.Medications)
                 .HasForeignKey(d => d.TypeId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.SetNull) 
                 .HasConstraintName("medications_ibfk_1");
+
+            entity.HasOne(d => d.Category)
+                .WithMany(p => p.Medications)
+                .HasForeignKey(d => d.CategoryId)
+                .OnDelete(DeleteBehavior.SetNull) 
+                .HasConstraintName("medications_ibfk_2");
         });
 
         modelBuilder.Entity<MedicationCategory>(entity =>
@@ -179,6 +190,7 @@ public partial class PharmacyDbContext : DbContext
             entity.HasOne(d => d.Component)
                 .WithMany(p => p.MedicationComponents)
                 .HasForeignKey(d => d.ComponentId)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("medication_components_ibfk_2");
         });
 
@@ -237,7 +249,7 @@ public partial class PharmacyDbContext : DbContext
 
             entity.HasOne(d => d.Prescription).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.PrescriptionId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("orders_ibfk_1");
 
             entity.HasOne(d => d.Registrar).WithMany(p => p.Orders)
@@ -289,7 +301,9 @@ public partial class PharmacyDbContext : DbContext
             entity.Property(e => e.Diagnosis)
                 .HasColumnType("text")
                 .HasColumnName("diagnosis");
-            entity.Property(e => e.DoctorId).HasColumnName("doctor_id");
+            entity.Property(e => e.DoctorId)
+         .HasColumnName("doctor_id")
+         .IsRequired(false);
             entity.Property(e => e.Dosage)
                 .HasColumnType("text")
                 .HasColumnName("dosage");
@@ -298,14 +312,16 @@ public partial class PharmacyDbContext : DbContext
                 .HasColumnName("duration");
             entity.Property(e => e.IssueDate).HasColumnName("issue_date");
 
-            entity.HasOne(d => d.Customer).WithMany(p => p.Prescriptions)
-        .HasForeignKey(d => d.CustomerId)
-        .OnDelete(DeleteBehavior.Cascade)
-        .HasConstraintName("prescriptions_ibfk_1");
+            entity.HasOne(d => d.Customer)
+         .WithMany(p => p.Prescriptions)
+         .HasForeignKey(d => d.CustomerId)
+         .OnDelete(DeleteBehavior.Cascade)
+         .HasConstraintName("prescriptions_ibfk_1");
 
-            entity.HasOne(d => d.Doctor).WithMany(p => p.Prescriptions)
+            entity.HasOne(d => d.Doctor)
+                .WithMany(p => p.Prescriptions)
                 .HasForeignKey(d => d.DoctorId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.SetNull) 
                 .HasConstraintName("prescriptions_ibfk_2");
         });
 
@@ -371,15 +387,16 @@ public partial class PharmacyDbContext : DbContext
             entity.Property(e => e.DeliveryTime).HasColumnName("delivery_time");
 
             entity.HasOne(d => d.Supplier)
-                   .WithMany(p => p.SupplierComponents)
-                   .HasForeignKey(d => d.SupplierId)
-                   .OnDelete(DeleteBehavior.Cascade)
-                   .HasConstraintName("supplier_components_ibfk_1");
+         .WithMany(p => p.SupplierComponents)
+         .HasForeignKey(d => d.SupplierId)
+         .OnDelete(DeleteBehavior.Cascade)
+         .HasConstraintName("supplier_components_ibfk_1");
 
-            entity.HasOne(d => d.Supplier).WithMany(p => p.SupplierComponents)
-                .HasForeignKey(d => d.SupplierId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("supplier_components_ibfk_1");
+            entity.HasOne(d => d.Component)
+                .WithMany(p => p.SupplierComponents)
+                .HasForeignKey(d => d.ComponentId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("supplier_components_ibfk_2");
         });
 
         modelBuilder.Entity<SupplyRequest>(entity =>
@@ -406,7 +423,7 @@ public partial class PharmacyDbContext : DbContext
 
             entity.HasOne(d => d.Component).WithMany(p => p.SupplyRequests)
                 .HasForeignKey(d => d.ComponentId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade    )
                 .HasConstraintName("supply_requests_ibfk_1");
         });
 

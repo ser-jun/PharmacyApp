@@ -223,6 +223,7 @@ namespace PharmacyApp.ViewModel
 
                 await _supplierRepository.DeleteSupplierItem(SelectedSupplier.SupplierId);
                 await LoadData();
+                ClearFields();
             }
             catch (Exception ex)
             {
@@ -253,14 +254,14 @@ namespace PharmacyApp.ViewModel
         }
         private void FillFields()
         {
-            SupplierName = SelectedSupplier.SupplierName;
-            ContactPerson = SelectedSupplier.ContactPerson;
-            Phone = SelectedSupplier.Phone;
-            Email = SelectedSupplier.Email;
-            Rating = SelectedSupplier.Rating;
-            ComponentId = SelectedSupplier.ComponentId;
-            DeliveryTimeDays = SelectedSupplier.DeliveryTimeDays;
-            MarkSelectedComponents();
+            //SupplierName = SelectedSupplier.SupplierName;
+            //ContactPerson = SelectedSupplier.ContactPerson;
+            //Phone = SelectedSupplier.Phone;
+            //Email = SelectedSupplier.Email;
+            //Rating = SelectedSupplier.Rating;
+            //ComponentId = SelectedSupplier.ComponentId;
+            //DeliveryTimeDays = SelectedSupplier.DeliveryTimeDays;
+            //MarkSelectedComponents();
         }
         private async Task LoadFilteredInfoByRatinOrComponent()
         {
