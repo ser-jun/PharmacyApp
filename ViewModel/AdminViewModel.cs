@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using PharmacyApp.Models;
 using System.Collections.ObjectModel;
+using PharmacyApp.View;
 
 namespace PharmacyApp.ViewModel
 {
@@ -32,7 +33,8 @@ namespace PharmacyApp.ViewModel
         {
         _adminRepository = adminRepository;
             DeleteItemUserCommand = new RelayCommand(async () => await DeleteUser());
-            EditUserCommand = new RelayCommand (async () => await UpdateUser());    
+            EditUserCommand = new RelayCommand (async () => await UpdateUser());
+            NavigateToMainCommand = new RelayCommand(GoMainWindow);
             LoadUsersInfo();
         }
         public User SelectedUser
@@ -103,7 +105,7 @@ namespace PharmacyApp.ViewModel
         }
         private void GoMainWindow()
         {
-            NavigationService.OpenWindow<MainWindow>();
+            NavigationService.OpenWindow<AdminChooseWindow>();
         }
         protected virtual void OnPropertyChanged(string propertyName)
         {

@@ -1,6 +1,7 @@
 ﻿using PharmacyApp.DTO;
 using PharmacyApp.Models;
 using PharmacyApp.Repositories.Interfaces;
+using PharmacyApp.View;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
@@ -19,6 +20,7 @@ namespace PharmacyApp.ViewModel
         public ICommand DeleteCommand { get; }
         public ICommand ClearCommand { get; }
         public ICommand ApplyFilter { get; }
+        public ICommand GoBackCommand { get; }
 
         private ObservableCollection<SupplierDto> _suppliers;
         private ObservableCollection<Models.Component> _allcomponents;
@@ -43,6 +45,7 @@ namespace PharmacyApp.ViewModel
             UpdateCommand = new RelayCommand(async () => await Updatesupplier());
             ClearCommand = new RelayCommand(ClearFields);
             ApplyFilter = new RelayCommand(async () => await LoadFilteredInfoByRatinOrComponent());
+            GoBackCommand = new RelayCommand(GoMenu);
             LoadData().ConfigureAwait(false);
         }
         public ObservableCollection<SupplierDto> Suppliers
@@ -293,6 +296,10 @@ namespace PharmacyApp.ViewModel
             {
                 await LoadData();
             }
+        }
+        private void GoMenu()
+        {
+            NavigationService.OpenWindow<AdminChooseWindow>();
         }
         protected virtual void OnPropertyChanged(string propertyName)
         {

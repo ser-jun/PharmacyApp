@@ -75,12 +75,13 @@
             <Button Content="Склад" 
                     Style="{StaticResource MenuButtonStyle}" 
                     Command="{Binding NavigateToStockCommand}" Margin="0,0,0,10"/>
-            <Button Content="Поставщики" 
-                    Style="{StaticResource MenuButtonStyle}"
-                    Command="{Binding NavigateToSuppliersCommand}" Margin="0,0,0,10"/>
+             <Button Content="Заказы компонентов" 
+                        Style="{StaticResource MenuButtonStyle}" 
+                        Command="{Binding NavigationToSupplierRequestCommand}" Margin="0,0,0,10"/>
             <Button Content="Окно администратора" 
                     Style="{StaticResource MenuButtonStyle}" 
-                    Command="{Binding NavigateToCustomersCommand}" Margin="0,0,0,10"/>
+                    Command="{Binding NavigateToAdministratorCommand}" Margin="0,0,0,10"/>
+          
      
         </StackPanel>
 

@@ -1,6 +1,7 @@
 ﻿using PharmacyApp.DTO;
 using PharmacyApp.Repositories;
 using PharmacyApp.Repositories.Interfaces;
+using PharmacyApp.View;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
@@ -15,6 +16,7 @@ namespace PharmacyApp.ViewModel
         public ICommand ClearCommand { get; }
         public ICommand ApplyFilterCommand { get; }
         public ICommand ApllyExpiredComponentsCommand { get; }
+        public ICommand GoMainMenuCommand { get; }  
 
         private IstockRepository _stockRepository;
         private StockItems _selectedItem;
@@ -38,6 +40,7 @@ namespace PharmacyApp.ViewModel
             ClearCommand = new RelayCommand(ClearTextBoxs);
             ApplyFilterCommand = new RelayCommand(async() => await FilterByShelfLife());
             ApllyExpiredComponentsCommand = new RelayCommand(async () => await FilteredByExpiredComponents());
+            GoMainMenuCommand = new RelayCommand(GoMainMenu);
             _ =LoadData();
         }
 
@@ -169,6 +172,10 @@ namespace PharmacyApp.ViewModel
         {
             var data = await _stockRepository.GetExpiredComponents();
             StockItems = new ObservableCollection<StockItems>(data);
+        }
+        private void GoMainMenu()
+        {
+            NavigationService.OpenWindow<MainMenu>();
         }
         protected virtual void OnPropertyChanged(string propertyName)
         {

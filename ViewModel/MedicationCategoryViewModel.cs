@@ -1,5 +1,6 @@
 ﻿using PharmacyApp.Models;
 using PharmacyApp.Repositories.Interfaces;
+using PharmacyApp.View;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -17,6 +18,7 @@ namespace PharmacyApp.ViewModel
         public ICommand EditCategoryCommand { get; }
         public ICommand DeleteCategoryCommand { get; }
         public ICommand ClearTextBoxsCommand { get; }
+        public ICommand GoBackCommand { get; }  
 
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly IMedicationCategoryRepository _categoryRepository;
@@ -31,7 +33,8 @@ namespace PharmacyApp.ViewModel
             AddCategoryCommand = new RelayCommand(async () => await AddCategory());
             EditCategoryCommand = new RelayCommand(async() => await UpdateCategory());
             DeleteCategoryCommand = new RelayCommand(async () => await DeleteCategory());
-            ClearTextBoxsCommand = new RelayCommand(ClearTextBoxs);    
+            ClearTextBoxsCommand = new RelayCommand(ClearTextBoxs);
+            GoBackCommand = new RelayCommand(GoMenu);
             _ =LoadData();
         }
         public MedicationCategory SelectedCategory
@@ -100,6 +103,10 @@ namespace PharmacyApp.ViewModel
         {
             Name = null;
             Description = null;
+        }
+        private void GoMenu()
+        {
+            NavigationService.OpenWindow<AdminChooseWindow>();
         }
         protected virtual void OnPropertyChanged(string propertyName)
         {

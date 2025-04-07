@@ -15,6 +15,7 @@ namespace PharmacyApp.ViewModel
         public ICommand OpenAddWindowCommand { get; }
         public ICommand DeleteItemCommand { get; }
         public ICommand EditItemCommand { get; }
+        public ICommand GomainMenuCommand { get; }
 
         private readonly IMedicationsRepository _medicationsRepository;
         public event PropertyChangedEventHandler PropertyChanged;
@@ -27,6 +28,7 @@ namespace PharmacyApp.ViewModel
             OpenAddWindowCommand = new RelayCommand(OpenFormToAdd);
             DeleteItemCommand = new RelayCommand(async () => await DeleteMedication());
             EditItemCommand = new RelayCommand(OpenFormToEdit);
+            GomainMenuCommand = new RelayCommand(OpenMainMenu);
             LoadMedications();
         }
         public ObservableCollection<MedicationsItems> Medications
@@ -100,6 +102,10 @@ namespace PharmacyApp.ViewModel
             }
 
             editWindow.ShowDialog();
+        }
+        private void OpenMainMenu()
+        {
+            NavigationService.OpenWindow<MainMenu>();
         }
         protected virtual void OnPropertyChanged(string propertyName)
         {

@@ -1,5 +1,6 @@
 ﻿using PharmacyApp.Models;
 using PharmacyApp.Repositories.Interfaces;
+using PharmacyApp.View;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
@@ -12,6 +13,7 @@ namespace PharmacyApp.ViewModel
         public ICommand EditDoctorCommand { get; }
         public ICommand DeleteDoctorCommand { get; }
         public ICommand ClearCommand { get; }
+        public ICommand GoMenuCommand { get; }
 
         private readonly IDoctorRepository _doctorRepository;
         public event PropertyChangedEventHandler PropertyChanged;
@@ -28,6 +30,7 @@ namespace PharmacyApp.ViewModel
             EditDoctorCommand = new RelayCommand(async () => await UpdateDoctor());
             DeleteDoctorCommand = new RelayCommand(async () => await DeleteDoctor());
             ClearCommand = new RelayCommand(ClearTextBoxs);
+            GoMenuCommand = new RelayCommand(GoMenu);
         }
         public ObservableCollection<Doctor> Doctors
         {
@@ -110,6 +113,10 @@ namespace PharmacyApp.ViewModel
             FullName = null;
             LicenseNumber = null;
             ContactInfo = null;
+        }
+        private void GoMenu()
+        {
+            NavigationService.OpenWindow<AdminChooseWindow>();
         }
         protected virtual void OnPropertyChanged(string propertyName)
         {

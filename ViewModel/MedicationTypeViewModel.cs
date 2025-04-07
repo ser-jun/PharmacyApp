@@ -1,8 +1,10 @@
 ﻿using PharmacyApp.Models;
 using PharmacyApp.Repositories.Interfaces;
+using PharmacyApp.View;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.ComponentModel.Design;
 using System.Windows.Input;
 
 namespace PharmacyApp.ViewModel
@@ -13,6 +15,7 @@ namespace PharmacyApp.ViewModel
         public ICommand EditTypeCommand { get; }
         public ICommand DeleteTypeCommand { get; }
         public ICommand ClearFormCommand { get; }
+        public ICommand GoMenuCommand { get; }
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly IMedicationTypesRepository _medicationTypesRepository;
         private MedicationType _selectedType;
@@ -33,6 +36,7 @@ namespace PharmacyApp.ViewModel
             DeleteTypeCommand = new RelayCommand(async () => await DeleteType());
             EditTypeCommand = new RelayCommand(async () => await UpdateType());
             ClearFormCommand = new RelayCommand(ClearTextBoxs);
+            GoMenuCommand = new RelayCommand(GoMenu);
             _ = LoadData();
         }
         
@@ -103,6 +107,10 @@ namespace PharmacyApp.ViewModel
         {
             Name = null;
             SelectedApplicationMethod = null;
+        }
+        private void GoMenu()
+        {
+            NavigationService.OpenWindow<AdminChooseWindow>();
         }
 
         protected virtual void OnPropertyChanged(string propertyName)

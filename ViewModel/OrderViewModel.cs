@@ -20,7 +20,7 @@ namespace PharmacyApp.ViewModel
         public ICommand OpenSupplyRequestCommand {  get; }  
         public ICommand OpenUncalmedWindowCommand { get; }
         public ICommand ApplyFilterCommand { get; } 
-        public ICommand ResetFilter { get; }
+        public ICommand GoMainWindowCommand { get; }
 
 
         private readonly IOrderRepository _orderRepository;
@@ -68,6 +68,7 @@ namespace PharmacyApp.ViewModel
             OpenSupplyRequestCommand = new RelayCommand(OpenSupplyRequestWindow);
             OpenUncalmedWindowCommand = new RelayCommand(OpenCustomerInfo);
             ApplyFilterCommand = new RelayCommand(async () => await LoadInProcessOrder());
+            GoMainWindowCommand = new RelayCommand(OpenMainMenu);
         }
 
         public OrderViewModel(IPendingOrderRepository pendingOrderRepository, ICrudRepository<Models.Component> component)
@@ -319,6 +320,10 @@ namespace PharmacyApp.ViewModel
         private void OpenCustomerInfo()
         {
             NavigationService.OpenForm<InformationCustomerOrders>();
+        }
+        private void OpenMainMenu()
+        {
+            NavigationService.OpenWindow<MainMenu>();
         }
 
     }

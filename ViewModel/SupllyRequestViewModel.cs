@@ -1,5 +1,6 @@
 ﻿using PharmacyApp.Models;
 using PharmacyApp.Repositories.Interfaces;
+using PharmacyApp.View;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,6 +17,7 @@ namespace PharmacyApp.ViewModel
         public ICommand UpdateCommand { get; }
         public ICommand DeleteCommand { get; }
         public ICommand ClearCommand { get; }
+        public ICommand NavigateToMainMenuCommand { get; }
 
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly ISupplyRequestRepository _supplyRequestRepository;
@@ -37,6 +39,7 @@ namespace PharmacyApp.ViewModel
             UpdateCommand = new RelayCommand(async () => await UpdateItem());
             DeleteCommand = new RelayCommand (async () => await DeleteItem());
             ClearCommand = new RelayCommand(ClearFields);
+            NavigateToMainMenuCommand = new RelayCommand(GoMainMenu);
             Statuses = new ObservableCollection<string>
             {
                "Ожидает обработки",
@@ -118,6 +121,10 @@ namespace PharmacyApp.ViewModel
             RequestedAmount = null;
             RequestDate = DateTime.Now;
             Status = null;
+        }
+        private void GoMainMenu()
+        {
+            NavigationService.OpenWindow<MainMenu>();
         }
         protected virtual void OnPropertyChanged(string propertyName)
         {

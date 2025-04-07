@@ -15,6 +15,7 @@ namespace PharmacyApp.ViewModel
         public ICommand NavigateToCategoryWindowCommand { get; }
         public ICommand NavigateToTypeWindowCommand { get; }
         public ICommand NavigateToDoctorsMindowCommand { get; }
+        public ICommand NavigateToSupplierCommand { get; }
         public ICommand GoBackCommand { get; }
         public event PropertyChangedEventHandler PropertyChanged;
         public AdminChooseViewModel() 
@@ -23,6 +24,7 @@ namespace PharmacyApp.ViewModel
             NavigateToTypeWindowCommand = new RelayCommand(GoTypeWindow);
             NavigateToCategoryWindowCommand = new RelayCommand(GoCategoryWindow);
             NavigateToDoctorsMindowCommand = new RelayCommand(GoDoctorsWindow);
+            NavigateToSupplierCommand = new RelayCommand(GoTosupplierWindow);
             GoBackCommand = new RelayCommand(GoBack);
         }
         private void GoUsersWindow()
@@ -40,6 +42,10 @@ namespace PharmacyApp.ViewModel
         private void GoDoctorsWindow()
         {
             NavigationService.OpenWindow<DoctorWindow>();
+        }
+        private void GoTosupplierWindow()
+        {
+            NavigationService.OpenWindow<SupplierWindow>();
         }
         private void GoBack()
         {

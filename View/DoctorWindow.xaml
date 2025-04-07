@@ -15,6 +15,7 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 0 10">
+            <Button Content="В меню" Width="120" Margin="5" Command="{Binding GoMenuCommand}"/>
             <Button Content="Добавить" Width="120" Margin="5" Command="{Binding AddDoctorCommand}"/>
             <Button Content="Редактировать" Width="120" Margin="5" Command="{Binding EditDoctorCommand}"/>
             <Button Content="Удалить" Width="120" Margin="5" Command="{Binding DeleteDoctorCommand}"/>

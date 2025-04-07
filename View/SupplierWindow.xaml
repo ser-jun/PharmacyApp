@@ -83,6 +83,7 @@
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
             <TextBox Text="{Binding SearchFiled, UpdateSourceTrigger=PropertyChanged}" Width="100" Margin="0,5,5,0"/>
+            <Button Content="В меню" Command="{Binding GoBackCommand}" Width="100" Margin="5"/>
             <Button Content="Фильтр по рейтингу или компоненту" Command="{Binding ApplyFilter}" Width="100" Margin="5"/>
             <Button Content="Добавить" Command="{Binding AddCommand}" Width="100" Margin="5"/>
             <Button Content="Редактировать" Command="{Binding UpdateCommand}" Width="100" Margin="5"/>
