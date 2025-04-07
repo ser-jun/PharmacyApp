@@ -131,12 +131,7 @@ namespace PharmacyApp.ViewModel
         private async Task ExecuteEntry()
         {
             var user = await _userRepository.AuthenticateAsync(UserName, Password);
-            switch (user.Role)
-            {
-                case "admin":
-                    NavigationService.OpenWindow<AdminWindow>();
-                    break;
-            }
+            NavigationService.OpenWindow<MainMenu>();
         }
 
         private async Task ExecuteRegister()

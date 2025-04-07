@@ -4,6 +4,34 @@
         Title="Управление пользователями" 
         Height="600" Width="900"
         WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <Style x:Key="NavigationButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#2196F3"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                            CornerRadius="5"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#1976D2"/>
+                    <Setter Property="Cursor" Value="Hand"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -11,19 +39,35 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
+
         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
 
-            <Button Content="Редактировать" Width="100" Margin="0,0,10,0" 
+         
+            <Button Content="На главную" 
+                    Width="100" 
+                    Margin="0,0,10,0" 
+                    Command="{Binding NavigateToMainCommand}" 
+                    Style="{StaticResource NavigationButtonStyle}"/>
+            <Button Content="Вперед →" 
+                    Width="80" 
+                    Margin="0,0,5,0" 
+                    Command="{Binding NavigateForwardCommand}" 
+                    Style="{StaticResource NavigationButtonStyle}"/>
+
+
+
+            <Button Content="Редактировать" 
+                    Width="100" 
+                    Margin="0,0,10,0" 
                     Command="{Binding EditUserCommand}" 
                     CommandParameter="{Binding SelectedUser}"/>
-            <Button Content="Удалить" Width="100" 
-                    Command="{Binding DeleteItemUserCommand}"
+            <Button Content="Удалить" 
+                    Width="100" 
+                    Command="{Binding DeleteItemUserCommand}" 
                     CommandParameter="{Binding SelectedUser}"/>
-
-
         </StackPanel>
 
-
+  
         <DataGrid Grid.Row="1" ItemsSource="{Binding Users}" 
                   SelectedItem="{Binding SelectedUser}"
                   AutoGenerateColumns="False"
@@ -36,6 +80,7 @@
                 <DataGridTextColumn Header="Телефон" Binding="{Binding ContactPhone}" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
+
 
         <Border Grid.Row="2" BorderBrush="LightGray" BorderThickness="0,1,0,0" Margin="0,10,0,0" Padding="0,10,0,0">
             <Grid>
@@ -57,12 +102,8 @@
                 <TextBlock Text="ФИО:" Grid.Row="0" Grid.Column="2" Margin="5"/>
                 <TextBox Text="{Binding FullName}" Grid.Row="0" Grid.Column="3" Margin="5"/>
 
-
-
                 <TextBlock Text="Телефон:" Grid.Row="1" Grid.Column="0" Margin="5"/>
                 <TextBox Text="{Binding Phone}" Grid.Row="1" Grid.Column="1" Margin="5"/>
-
-
             </Grid>
         </Border>
     </Grid>

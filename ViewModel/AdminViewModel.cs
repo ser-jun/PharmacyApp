@@ -15,6 +15,9 @@ namespace PharmacyApp.ViewModel
     {
         public ICommand EditUserCommand { get; }
         public ICommand DeleteItemUserCommand { get; }
+        public ICommand NavigateBackCommand { get; }
+        public ICommand NavigateToMainCommand { get; }
+        public ICommand NavigateForwardCommand { get; }
 
         private User _selectedUser;
         private ObservableCollection<User> _users;
@@ -92,6 +95,15 @@ namespace PharmacyApp.ViewModel
         {
             await _adminRepository.UpdateItemUser(Name, FullName, Phone, SelectedUser.UserId);
             await LoadUsersInfo();
+        }
+
+        private void GoForwardWindow()
+        {
+
+        }
+        private void GoMainWindow()
+        {
+            NavigationService.OpenWindow<MainWindow>();
         }
         protected virtual void OnPropertyChanged(string propertyName)
         {
