@@ -50,7 +50,8 @@
         </GroupBox>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 0 10">
-            <Button Content="На главную" Command="{Binding GoMainMenuCommand}" Width="100" Margin="5"/>
+            <TextBox Grid.Row="2" Grid.Column="3" Text="{Binding SearchName, UpdateSourceTrigger=PropertyChanged}" Width="100" Margin="0"/>
+            <Button Content="На главную" Command="{Binding GoMainMenuCommand}" Width="100" Margin="0"/>
             <Button Content="Истекший срок годности" Command="{Binding ApllyExpiredComponentsCommand}" Width="100" Margin="5"/>
             <Button Content="По Сроку годности" Command="{Binding ApplyFilterCommand}" Width="100" Margin="5"/>
             <Button Content="Добавить" Command="{Binding AddCommand}" Width="100" Margin="5"/>

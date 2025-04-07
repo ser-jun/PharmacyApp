@@ -27,6 +27,7 @@ namespace PharmacyApp.ViewModel
         private decimal _criticalNorm;
         private int _shelfLife;
         private DateTime _arrivalDate;
+        private string _searchName;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -117,8 +118,22 @@ namespace PharmacyApp.ViewModel
                 OnPropertyChanged(nameof(ArrivalDate));
             }
         }
+        public string SearchName
+        {
+            get => _searchName;
+            set
+            {
+                _searchName = value;
+                _ = SearchByName();
+                OnPropertyChanged(nameof(SearchName));
+            }
+        }
 
-
+        private async Task SearchByName()
+        {
+            var data = await _stockRepository.SearchByNameComponentStock(SearchName);
+            StockItems = new ObservableCollection<StockItems>(data);
+        }
         private async Task LoadData()
         {
             var data = await _stockRepository.LoadStockItems();

@@ -76,5 +76,9 @@ namespace PharmacyApp.Repositories
         {
             return await _context.Database.SqlQueryRaw<StockItems>("CALL GetExpiredComponents()").ToListAsync();
         }
+        public async Task<IEnumerable<StockItems>> SearchByNameComponentStock(string name)
+        {
+            return await _context.Database.SqlQueryRaw<StockItems>("CALL SearchStockByComponentName({0})", name).ToListAsync(); 
+        }
     }
 }

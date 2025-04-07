@@ -17,5 +17,6 @@ namespace PharmacyApp.Repositories.Interfaces
     decimal newCriticalNorm, DateTime newArriveData, int newShelfLife);
         Task<IEnumerable<StockItems>> GetFilteredDataByShelfLife();
         Task<IEnumerable<StockItems>> GetExpiredComponents();
+        Task<IEnumerable<StockItems>> SearchByNameComponentStock(string name);
     }
 }

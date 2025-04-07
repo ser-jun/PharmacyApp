@@ -69,7 +69,7 @@
             <Button Content="Медикаменты" 
                     Style="{StaticResource MenuButtonStyle}" 
                     Command="{Binding NavigateToMedicationsCommand}" Margin="0,0,0,10"/>
-            <Button Content="Заказы" 
+            <Button Content="Заказы лекарств" 
                     Style="{StaticResource MenuButtonStyle}" 
                     Command="{Binding NavigateToOrdersCommand}" Margin="0,0,0,10"/>
             <Button Content="Склад" 
