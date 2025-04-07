@@ -16,12 +16,17 @@ namespace PharmacyApp.ViewModel
         public ICommand DeleteItemCommand { get; }
         public ICommand EditItemCommand { get; }
         public ICommand GomainMenuCommand { get; }
+        public ICommand ApplyFilterCommand { get; }
+        public ICommand ResetFilterCommand { get; }
 
         private readonly IMedicationsRepository _medicationsRepository;
         public event PropertyChangedEventHandler PropertyChanged;
         private ObservableCollection<MedicationsItems> _medications;
         private MedicationsItems _selectedMedication;
         private string _searchField;
+
+        private int _selectedCategoryId;
+        private ObservableCollection<MedicationCategory> _categories;
         public MedicationsViewModel(IMedicationsRepository medicationsRepository)
         {
             _medicationsRepository = medicationsRepository;
@@ -29,7 +34,10 @@ namespace PharmacyApp.ViewModel
             DeleteItemCommand = new RelayCommand(async () => await DeleteMedication());
             EditItemCommand = new RelayCommand(OpenFormToEdit);
             GomainMenuCommand = new RelayCommand(OpenMainMenu);
-            LoadMedications();
+            ApplyFilterCommand = new RelayCommand(async () => await FilterByCategory());
+            ResetFilterCommand = new RelayCommand(ResetFilter);
+            Init().ConfigureAwait(false);
+
         }
         public ObservableCollection<MedicationsItems> Medications
         {
@@ -62,10 +70,40 @@ namespace PharmacyApp.ViewModel
                 }
             }
         }
+
+        public ObservableCollection<MedicationCategory> Categories
+        {
+            get => _categories;
+            set
+            {
+                _categories = value;
+                OnPropertyChanged(nameof(Categories));
+            }
+        }
+        public int SelectedCategoryId
+        {
+            get => _selectedCategoryId;
+            set
+            {
+                _selectedCategoryId = value;
+                OnPropertyChanged(nameof(SelectedCategoryId));
+            }
+        }
+        private async Task Init()
+        {
+            await LoadCategories();
+            await LoadMedications();
+        }
         private async Task LoadMedications()
         {
             var data = await _medicationsRepository.LoadMedicationsInfo();
             Medications = new ObservableCollection<MedicationsItems>(data);
+
+        }
+        private async Task LoadCategories()
+        {
+            var categories = await _medicationsRepository.LoadMedicationCategory();
+            Categories = new ObservableCollection<MedicationCategory>(categories);
         }
         private async Task DeleteMedication()
         {
@@ -106,6 +144,16 @@ namespace PharmacyApp.ViewModel
         private void OpenMainMenu()
         {
             NavigationService.OpenWindow<MainMenu>();
+        }
+        private async Task FilterByCategory()
+        {
+            var data = await _medicationsRepository.GetMedicationsByCategory(SelectedCategoryId);
+            Medications = new ObservableCollection<MedicationsItems>(data);
+        }
+        private void ResetFilter()
+        {
+            SelectedCategoryId = 0;
+            LoadMedications();
         }
         protected virtual void OnPropertyChanged(string propertyName)
         {

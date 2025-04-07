@@ -8,10 +8,35 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" 
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="5">
+            <TextBlock Text="Категория:" VerticalAlignment="Center" Margin="5 0"/>
+            <ComboBox ItemsSource="{Binding Categories}" 
+                      DisplayMemberPath="Name"
+                      SelectedValuePath="CategoryId"
+                      SelectedValue="{Binding SelectedCategoryId}"
+                      Width="200"
+                      Margin="5 0"/>
+
+            <Button Content="Применить" 
+                    Command="{Binding ApplyFilterCommand}" 
+                    Padding="10 5" 
+                    MinWidth="80" 
+                    Margin="5 0"/>
+
+            <Button Content="Сбросить" 
+                    Command="{Binding ResetFilterCommand}" 
+                    Padding="10 5" 
+                    MinWidth="80" 
+                    Margin="5 0"/>
+        </StackPanel>
+
+      
+        <StackPanel Grid.Row="1" 
                     Orientation="Horizontal" 
                     HorizontalAlignment="Right"
                     Margin="5">
@@ -22,8 +47,7 @@
             <Button Content="Добавить" Command="{Binding OpenAddWindowCommand}" Padding="10 5" MinWidth="80" Margin="5 0"/>
         </StackPanel>
 
-     
-        <DataGrid Grid.Row="1" 
+        <DataGrid Grid.Row="2" 
                   ItemsSource="{Binding Medications}" 
                   SelectedItem="{Binding SelectedMedication}"
                   AutoGenerateColumns="False"

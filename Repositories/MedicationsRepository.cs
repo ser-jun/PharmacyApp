@@ -111,5 +111,9 @@ namespace PharmacyApp.Repositories
         {
             return await _context.Database.SqlQueryRaw<MedicationsItems>("CALL SearchMedications({0})", name).ToListAsync();
         }
+        public async Task<IEnumerable<MedicationsItems>> GetMedicationsByCategory(int categoryId)
+        {
+            return await _context.Database.SqlQueryRaw<MedicationsItems>("CALL GetMedicationsByCategory({0})", categoryId).ToListAsync();
+        }
     }
 }

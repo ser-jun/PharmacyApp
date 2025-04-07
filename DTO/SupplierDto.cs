@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PharmacyApp.DTO
 {
-    public class SupplierDto
+    public class SupplierDto        
     {
         public int SupplierId { get; set; }
         public string SupplierName { get; set; }
