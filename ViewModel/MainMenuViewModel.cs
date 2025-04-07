@@ -18,6 +18,7 @@ namespace PharmacyApp.ViewModel
         public ICommand NavigateToStockCommand { get; }
         public ICommand NavigationToSupplierRequestCommand { get; }
         public ICommand NavigateToAdministratorCommand { get; }
+        public ICommand NavigateToPrescriptionCommand { get; }
         public event PropertyChangedEventHandler PropertyChanged;
 
         public MainMenuViewModel()
@@ -27,6 +28,7 @@ namespace PharmacyApp.ViewModel
             NavigateToStockCommand = new RelayCommand(OpenStockWindow);
             NavigationToSupplierRequestCommand = new RelayCommand(OpenSupplyRequestWindow);
             NavigateToAdministratorCommand = new RelayCommand(OpenAdminWindow);
+            NavigateToPrescriptionCommand = new RelayCommand(OpenPrescriptionWindow);
 
         }
 
@@ -50,7 +52,10 @@ namespace PharmacyApp.ViewModel
         {
             NavigationService.OpenWindow<AdminChooseWindow>();
         }
-        
+        private void OpenPrescriptionWindow()
+        {
+            NavigationService.OpenWindow<PrescriptionWindow>();    
+        }
       
 
     }

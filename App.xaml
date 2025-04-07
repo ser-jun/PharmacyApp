@@ -33,5 +33,7 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        <local:RoleToVisibilityConverter x:Key="RoleToVisibilityConverter"/>
     </Application.Resources>
+    
 </Application>

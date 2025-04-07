@@ -242,7 +242,7 @@ public partial class PharmacyDbContext : DbContext
 
             entity.HasOne(d => d.Registrar).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.RegistrarId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.SetNull)
                 .HasConstraintName("orders_ibfk_3");
         });
 
