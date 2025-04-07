@@ -276,22 +276,35 @@ namespace PharmacyApp.ViewModel
         }
         private async Task AddOrder()
         {
-            
-            await _orderRepository.AddOrderItem(SelectedPrescription.PrescriptionId,SelectedMedication.MedicationId,Amount,
-                SelectedRegistrar.UserId, OrderDate, Status,Price, SelectedComponent, ComponentAmount);
-            await LoadData();
+            if (SelectedPrescription == null) { MessageBox.Show("Выберите рецепт"); return; }
+            if (SelectedMedication == null) { MessageBox.Show("Выберите лекарство"); return; }
+            if (Amount <= 0) { MessageBox.Show("Укажите количество"); return; }
+            if (SelectedRegistrar == null) { MessageBox.Show("Выберите регистратора"); return; }
+            if (Status == null) { MessageBox.Show("Выберите статус"); return; }
+            if (SelectedComponent == null) { MessageBox.Show("Выберите компонент"); return; }
+            if (ComponentAmount == null) { MessageBox.Show("Выберите количество компонента"); return; }
+            await _orderRepository.AddOrderItem(SelectedPrescription.PrescriptionId, SelectedMedication.MedicationId, Amount,
+                SelectedRegistrar.UserId, OrderDate, Status, Price, SelectedComponent, ComponentAmount); await LoadData();
         }
+
         private async Task DeleteOrder()
         {
-            await _orderRepository.DeleteOrderItem(SelectedOrder); 
-            await LoadData();
-        
+            if (SelectedOrder == null) { MessageBox.Show("Заказ не выбран"); return; }
+            await _orderRepository.DeleteOrderItem(SelectedOrder); await LoadData();
         }
+
         private async Task UpdateOrder()
         {
+            if (SelectedOrder == null) { MessageBox.Show("Заказ не выбран"); return; }
+            if (SelectedPrescription == null) { MessageBox.Show("Выберите рецепт"); return; }
+            if (SelectedMedication == null) { MessageBox.Show("Выберите лекарство"); return; }
+            if (Amount <= 0) { MessageBox.Show("Укажите количество"); return; }
+            if (SelectedRegistrar == null) { MessageBox.Show("Выберите регистратора"); return; }
+            if (Status == null) { MessageBox.Show("Выберите статус"); return; }
+            if (SelectedComponent == null) { MessageBox.Show("Выберите компонент"); return; }
+            if (ComponentAmount == null) { MessageBox.Show("Выберите количество компонента"); return; }
             await _orderRepository.UpdateOrderItem(SelectedOrder, SelectedPrescription.PrescriptionId, SelectedMedication.MedicationId,
-                Amount, SelectedRegistrar.UserId, OrderDate, Status, Price, SelectedComponent, ComponentAmount);
-            await LoadData();
+                Amount, SelectedRegistrar.UserId, OrderDate, Status, Price, SelectedComponent, ComponentAmount); await LoadData();
         }
         private void ClearFields()
         {

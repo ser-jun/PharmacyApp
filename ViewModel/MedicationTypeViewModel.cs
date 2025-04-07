@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.ComponentModel.Design;
+using System.Windows;
 using System.Windows.Input;
 
 namespace PharmacyApp.ViewModel
@@ -85,23 +86,32 @@ namespace PharmacyApp.ViewModel
         }
         private async Task AddType()
         {
-            await _medicationTypesRepository.AddTypeItem(Name, SelectedApplicationMethod);
-            await LoadData();
+            if (string.IsNullOrWhiteSpace(Name)) { MessageBox.Show("Введите название типа"); return; }
+            if (SelectedApplicationMethod == null) { MessageBox.Show("Выберите метод применения"); return; }
+            await _medicationTypesRepository.AddTypeItem(Name, SelectedApplicationMethod); await LoadData();
         }
+
         private async Task DeleteType()
         {
-            await _medicationTypesRepository.DeleteTypeItem(SelectedType);
-            await LoadData();
+            if (SelectedType == null) { MessageBox.Show("Тип не выбран"); return; }
+            await _medicationTypesRepository.DeleteTypeItem(SelectedType); await LoadData();
         }
+
         private async Task UpdateType()
         {
-            await _medicationTypesRepository.UpdateTypeItem(SelectedType, Name, SelectedApplicationMethod);
-            await LoadData();
+            if (SelectedType == null) { MessageBox.Show("Тип не выбран"); return; }
+            if (string.IsNullOrWhiteSpace(Name)) { MessageBox.Show("Введите название типа"); return; }
+            if (SelectedApplicationMethod == null) { MessageBox.Show("Выберите метод применения"); return; }
+            await _medicationTypesRepository.UpdateTypeItem(SelectedType, Name, SelectedApplicationMethod); await LoadData();
         }
         private void FillTextBoxs()
         {
-            //Name = SelectedType.Name;
-            //SelectedApplicationMethod = SelectedType.ApplicationMethod;
+            if(SelectedType == null)
+            {
+                return;
+            }
+            Name = SelectedType.Name;
+            SelectedApplicationMethod = SelectedType.ApplicationMethod;
         }
         private void ClearTextBoxs()
         {

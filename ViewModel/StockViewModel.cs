@@ -4,6 +4,7 @@ using PharmacyApp.Repositories.Interfaces;
 using PharmacyApp.View;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows;
 using System.Windows.Input;
 
 namespace PharmacyApp.ViewModel
@@ -139,21 +140,32 @@ namespace PharmacyApp.ViewModel
             var data = await _stockRepository.LoadStockItems();
             StockItems = new ObservableCollection<StockItems>(data);
         }
-        private async Task AddStockComponent ()
+        private async Task AddStockComponent()
         {
-            await _stockRepository.AddComponent(ComponentName, UnitOfMeasure, Amount, CriticalNorm, ArrivalDate, ShelfLife);
+            if (string.IsNullOrWhiteSpace(ComponentName)) { MessageBox.Show("Введите название компонента"); return; }
+            if (string.IsNullOrWhiteSpace(UnitOfMeasure)) { MessageBox.Show("Укажите единицы измерения"); return; }
+            if (Amount <= 0) { MessageBox.Show("Количество должно быть больше 0"); return; }
+            if (CriticalNorm <= 0) { MessageBox.Show("Критическая норма должна быть больше 0"); return; }
+            if (ShelfLife <= 0) { MessageBox.Show("введите срок годности"); return; }
+            await _stockRepository.AddComponent(ComponentName, UnitOfMeasure, Amount, CriticalNorm, ArrivalDate, ShelfLife); 
             await LoadData();
         }
+
         private async Task DeleteStockComponent()
         {
-            await _stockRepository.DeleteItem(SelectedItem.ComponentId);
-            await LoadData();
+            if (SelectedItem == null) { MessageBox.Show("Компонент не выбран"); return; }
+            await _stockRepository.DeleteItem(SelectedItem.ComponentId); await LoadData();
         }
+
         private async Task UpdateStockComponent()
         {
-            await _stockRepository.UpdateItem(SelectedItem.ComponentId, SelectedItem.StockId, ComponentName, UnitOfMeasure, Amount, CriticalNorm,
-                ArrivalDate, ShelfLife);
-            await LoadData();
+            if (SelectedItem == null) { MessageBox.Show("Компонент не выбран"); return; }
+            if (string.IsNullOrWhiteSpace(ComponentName)) { MessageBox.Show("Введите название компонента"); return; }
+            if (string.IsNullOrWhiteSpace(UnitOfMeasure)) { MessageBox.Show("Укажите единицы измерения"); return; }
+            if (Amount <= 0) { MessageBox.Show("Количество должно быть больше 0"); return; }
+            if (CriticalNorm <= 0) { MessageBox.Show("Критическая норма должна быть больше 0"); return; }
+            if (ShelfLife <= 0) { MessageBox.Show("введите срок годности"); return; }
+            await _stockRepository.UpdateItem(SelectedItem.ComponentId, SelectedItem.StockId, ComponentName, UnitOfMeasure, Amount, CriticalNorm, ArrivalDate, ShelfLife); await LoadData();
         }
         private void FillTextBoxs()
         {

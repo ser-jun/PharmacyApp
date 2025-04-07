@@ -175,18 +175,32 @@ namespace PharmacyApp.ViewModel
         }
         private async Task AddPrescription()
         {
-            await _prescriptionRepository.AddPrescriptionItem(SelectedCustomer.CustomerId, SelectedDoctor.DoctorId, IssueDate, Diagnosis,
-                Dosage, Duration);
+            if (SelectedCustomer == null) { MessageBox.Show("Выберите пациента"); return; }
+            if (SelectedDoctor == null) { MessageBox.Show("Выберите врача"); return; }
+            if (string.IsNullOrWhiteSpace(Diagnosis)) { MessageBox.Show("Введите диагноз"); return; }
+            if (string.IsNullOrWhiteSpace(Dosage)) { MessageBox.Show("Введите дозу и лекарство"); return; }
+            if (string.IsNullOrWhiteSpace(Duration)) { MessageBox.Show("Введите продолжительность приема"); return; }
+            await _prescriptionRepository.AddPrescriptionItem(SelectedCustomer.CustomerId, SelectedDoctor.DoctorId, 
+                IssueDate, Diagnosis, Dosage, Duration);
             await LoadData();
         }
+
         private async Task UpdatePrescription()
         {
-            await _prescriptionRepository.UpdatePrescriptionItem(SelectedPrescription, SelectedCustomer.CustomerId, SelectedDoctor.DoctorId,
-                IssueDate, Diagnosis, Dosage,Duration);
+            if (SelectedPrescription == null) { MessageBox.Show("Рецепт не выбран"); return; }
+            if (SelectedCustomer == null) { MessageBox.Show("Выберите пациента"); return; }
+            if (SelectedDoctor == null) { MessageBox.Show("Выберите врача"); return; }
+            if (string.IsNullOrWhiteSpace(Diagnosis)) { MessageBox.Show("Введите диагноз"); return; }
+            if (string.IsNullOrWhiteSpace(Dosage)) { MessageBox.Show("Введите дозу и лекарство"); return; }
+            if (string.IsNullOrWhiteSpace(Duration)) { MessageBox.Show("Введите продолжительность приема"); return; }
+            await _prescriptionRepository.UpdatePrescriptionItem(SelectedPrescription, SelectedCustomer.CustomerId,
+                SelectedDoctor.DoctorId, IssueDate, Diagnosis, Dosage, Duration); 
             await LoadData();
         }
+
         private async Task DeletePrescription()
         {
+            if (SelectedPrescription == null) { MessageBox.Show("Рецепт не выбран"); return; }
             await _prescriptionRepository.DeletePrescritionItem(SelectedPrescription);
             await LoadData();
         }

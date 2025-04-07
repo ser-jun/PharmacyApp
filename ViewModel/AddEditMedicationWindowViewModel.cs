@@ -3,6 +3,7 @@ using PharmacyApp.Models;
 using PharmacyApp.Repositories.Interfaces;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows;
 using System.Windows.Input;
 
 namespace PharmacyApp.ViewModel
@@ -195,19 +196,78 @@ namespace PharmacyApp.ViewModel
         }
         private async Task AddMedication()
         {
-            await _medicationFormAddEdit.AddMedicationItem(Name, IsReadyMade, Price, SelectedType, SelectedCategory, SelectedComponents.ToList(), _componentAmounts);
+            if (string.IsNullOrWhiteSpace(Name))
+            {
+                MessageBox.Show("Введите название лекарства");
+                return;
+            }
+
+            if (SelectedType == null)
+            {
+                MessageBox.Show("Выберите тип лекарства");
+                return;
+            }
+
+            if (SelectedCategory == null)
+            {
+                MessageBox.Show("Выберите категорию");
+                return;
+            }
+
+            if (Price <= 0)
+            {
+                MessageBox.Show("Цена должна быть больше 0");
+                return;
+            }
+            await _medicationFormAddEdit.AddMedicationItem(Name, IsReadyMade, Price, SelectedType,
+                SelectedCategory, SelectedComponents.ToList(), _componentAmounts);
             MedicationAdded?.Invoke();
+
+
         }
         private async Task LoadComponents()
         {
-          var data = await _medicationFormAddEdit.GetComponentList();
+            var data = await _medicationFormAddEdit.GetComponentList();
             AllComponents = new ObservableCollection<Models.Component>(data);
         }
-        private async Task UpdateMedication ()
+        private async Task UpdateMedication()
         {
-            await _medicationFormAddEdit.UpdateMedicationItem(_medicationToEdit.MedicationId, Name, IsReadyMade, Price, SelectedType, SelectedCategory, 
-                SelectedComponents.ToList(), _componentAmounts);
-            MedicationUpdated?.Invoke();
+   
+            if (_medicationToEdit == null)
+            {
+                MessageBox.Show("Не выбрано лекарство для редактирования");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(Name))
+            {
+                MessageBox.Show("Введите название лекарства");
+                return;
+            }
+
+            if (SelectedType == null)
+            {
+                MessageBox.Show("Выберите тип лекарства");
+                return;
+            }
+
+            if (SelectedCategory == null)
+            {
+                MessageBox.Show("Выберите категорию");
+                return;
+            }
+
+            if (Price <= 0)
+            {
+                MessageBox.Show("Цена должна быть больше 0");
+                return;
+            }
+
+                await _medicationFormAddEdit.UpdateMedicationItem(_medicationToEdit.MedicationId, Name, IsReadyMade, Price, SelectedType,
+                    SelectedCategory, SelectedComponents.ToList(), _componentAmounts);
+
+                MedicationUpdated?.Invoke();
+     
         }
         private async Task ExecuteAction()
         {

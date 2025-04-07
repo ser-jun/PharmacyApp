@@ -107,6 +107,7 @@ namespace PharmacyApp.ViewModel
         }
         private async Task DeleteMedication()
         {
+            if (SelectedMedication == null) { MessageBox.Show("Выберите лекарство для удаления"); return; }
             await _medicationsRepository.DeleteMedicationItem(SelectedMedication.MedicationId);
             await LoadMedications();
         }

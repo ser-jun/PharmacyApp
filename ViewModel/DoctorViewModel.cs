@@ -3,6 +3,7 @@ using PharmacyApp.Repositories.Interfaces;
 using PharmacyApp.View;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows;
 using System.Windows.Input;
 
 namespace PharmacyApp.ViewModel
@@ -86,17 +87,27 @@ namespace PharmacyApp.ViewModel
         }
         private async Task AddDoctor()
         {
-            await _doctorRepository.AddDoctorItem(FullName, LicenseNumber, ContactInfo);
+            if (string.IsNullOrWhiteSpace(FullName)) { MessageBox.Show("Введите ФИО врача"); return; }
+            if (string.IsNullOrWhiteSpace(LicenseNumber)) { MessageBox.Show("Введите номер лицензии"); return; }
+            if (string.IsNullOrWhiteSpace(ContactInfo)) { MessageBox.Show("Введите информацию для связи"); return; }
+            await _doctorRepository.AddDoctorItem(FullName, LicenseNumber, ContactInfo); 
             await LoadDoctors();
         }
+
         private async Task DeleteDoctor()
         {
-            await _doctorRepository.DeleteDoctorItem(SelectedDoctor);
+            if (SelectedDoctor == null) { MessageBox.Show("Врач для удаления не выбран"); return; }
+            await _doctorRepository.DeleteDoctorItem(SelectedDoctor); 
             await LoadDoctors();
         }
+
         private async Task UpdateDoctor()
         {
-            await _doctorRepository.UpdateDoctorItem(SelectedDoctor, FullName, LicenseNumber, ContactInfo);
+            if (SelectedDoctor == null) { MessageBox.Show("Врач не выбран"); return; }
+            if (string.IsNullOrWhiteSpace(FullName)) { MessageBox.Show("Введите ФИО врача"); return; }
+            if (string.IsNullOrWhiteSpace(LicenseNumber)) { MessageBox.Show("Введите номер лицензии"); return; }
+            if (string.IsNullOrWhiteSpace(ContactInfo)) { MessageBox.Show("Введите информацию для связи"); return; }
+            await _doctorRepository.UpdateDoctorItem(SelectedDoctor, FullName, LicenseNumber, ContactInfo); 
             await LoadDoctors();
         }
         private void FillTextBoxs()

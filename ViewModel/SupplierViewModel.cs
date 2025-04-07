@@ -1,5 +1,6 @@
 ﻿using PharmacyApp.DTO;
 using PharmacyApp.Models;
+using PharmacyApp.Repositories;
 using PharmacyApp.Repositories.Interfaces;
 using PharmacyApp.View;
 using System.Collections.ObjectModel;
@@ -181,20 +182,15 @@ namespace PharmacyApp.ViewModel
 
         private async Task AddSupplier()
         {
-            try
-            {
-
-                await _supplierRepository.AddSupplierItem(SupplierName, ContactPerson, Phone, Email, Rating, DeliveryTimeDays,
-                  GetSelectedComponents());
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-            finally
-            {
-                await LoadData();
-            }
+            if (string.IsNullOrWhiteSpace(SupplierName)) { MessageBox.Show("Введите название поставщика"); return; }
+            if (string.IsNullOrWhiteSpace(ContactPerson)) { MessageBox.Show("Введите имя ответственного"); return; }
+            if (string.IsNullOrWhiteSpace(Phone)) { MessageBox.Show("Введите телефон"); return; }
+            if (string.IsNullOrWhiteSpace(Email)) { MessageBox.Show("Введите почту"); return; }
+            if (GetSelectedComponents().Count == 0) { MessageBox.Show("Выберите компоненты"); return; }
+            if (Rating ==0 ) { MessageBox.Show("Введите рейтинг"); return; }
+            await _supplierRepository.AddSupplierItem(SupplierName, ContactPerson, Phone, Email, Rating,
+                DeliveryTimeDays, GetSelectedComponents());
+            await LoadData();
         }
 
         private List<Models.Component> GetSelectedComponents()
@@ -218,23 +214,39 @@ namespace PharmacyApp.ViewModel
 
         private async Task DeleteSupplier()
         {
+            if (SelectedSupplier == null)
+            {
+                MessageBox.Show("Выберите поставщика для удаления");
+                return;
+            }
+
             try
             {
+               
+                using (var localContext = new PharmacyDbContext())
+                {
+                    var localRepository = new SupplierRepository(localContext); 
+                    await localRepository.DeleteSupplierItem(SelectedSupplier.SupplierId);
+                }
 
-                await _supplierRepository.DeleteSupplierItem(SelectedSupplier.SupplierId);
-                await LoadData();
                 ClearFields();
+                await LoadData(); 
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show($"Ошибка при удалении: {ex.Message}");
             }
         }
         private async Task Updatesupplier()
         {
-            await _supplierRepository.UpdateSupplierItem(SelectedSupplier.SupplierId, SupplierName, ContactPerson,
-                Phone, Email, Rating, DeliveryTimeDays, GetSelectedComponents());
-            await LoadData();
+            if (SelectedSupplier == null) { MessageBox.Show("Поставщик не выбран"); return; }
+            if (string.IsNullOrWhiteSpace(SupplierName)) { MessageBox.Show("Введите название поставщика"); return; }
+            if (string.IsNullOrWhiteSpace(ContactPerson)) { MessageBox.Show("Введите имя ответственного"); return; }
+            if (string.IsNullOrWhiteSpace(Phone)) { MessageBox.Show("Введите телефон"); return; }
+            if (string.IsNullOrWhiteSpace(Email)) { MessageBox.Show("Введите почту"); return; }
+            if (GetSelectedComponents().Count == 0) { MessageBox.Show("Выберите компоненты"); return; }
+            if (Rating == 0) { MessageBox.Show("Введите рейтинг"); return; }
+            await _supplierRepository.UpdateSupplierItem(SelectedSupplier.SupplierId, SupplierName, ContactPerson, Phone, Email, Rating, DeliveryTimeDays, GetSelectedComponents()); await LoadData();
         }
         private void ClearFields()
         {
@@ -254,14 +266,19 @@ namespace PharmacyApp.ViewModel
         }
         private void FillFields()
         {
-            //SupplierName = SelectedSupplier.SupplierName;
-            //ContactPerson = SelectedSupplier.ContactPerson;
-            //Phone = SelectedSupplier.Phone;
-            //Email = SelectedSupplier.Email;
-            //Rating = SelectedSupplier.Rating;
-            //ComponentId = SelectedSupplier.ComponentId;
-            //DeliveryTimeDays = SelectedSupplier.DeliveryTimeDays;
-            //MarkSelectedComponents();
+            if (SelectedSupplier == null)
+            {
+                ClearFields(); 
+                return;
+            }
+            SupplierName = SelectedSupplier.SupplierName;
+            ContactPerson = SelectedSupplier.ContactPerson;
+            Phone = SelectedSupplier.Phone;
+            Email = SelectedSupplier.Email;
+            Rating = SelectedSupplier.Rating;
+            ComponentId = SelectedSupplier.ComponentId;
+            DeliveryTimeDays = SelectedSupplier.DeliveryTimeDays;
+            MarkSelectedComponents();
         }
         private async Task LoadFilteredInfoByRatinOrComponent()
         {

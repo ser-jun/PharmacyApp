@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace PharmacyApp.ViewModel
@@ -81,23 +82,32 @@ namespace PharmacyApp.ViewModel
         }
         private async Task AddCategory()
         {
-            await _categoryRepository.AddCategoryItem(Name, Description);
-            await LoadData();
+            if (string.IsNullOrWhiteSpace(Name)) { MessageBox.Show("Введите название категории"); return; }
+            if (string.IsNullOrWhiteSpace(Description)) { MessageBox.Show("Введите описание"); return; }
+            await _categoryRepository.AddCategoryItem(Name, Description); await LoadData();
         }
+
         private async Task DeleteCategory()
         {
-            await _categoryRepository.DeleteCategoryItem(SelectedCategory);
-            await LoadData();   
+            if (SelectedCategory == null) { MessageBox.Show("Категория для удаления не выбрана"); return; }
+            await _categoryRepository.DeleteCategoryItem(SelectedCategory); await LoadData();
         }
+
         private async Task UpdateCategory()
         {
-            await _categoryRepository.UpdateCategoryItem(SelectedCategory, Name, Description);
-            await LoadData();
+            if (SelectedCategory == null) { MessageBox.Show("Категория для обновления не выбрана"); return; }
+            if (string.IsNullOrWhiteSpace(Name)) { MessageBox.Show("Введите название категории"); return; }
+            if (string.IsNullOrWhiteSpace(Description)) { MessageBox.Show("Введите описание"); return; }
+            await _categoryRepository.UpdateCategoryItem(SelectedCategory, Name, Description); await LoadData();
         }
         private void FillTextBoxs()
         {
-            //Name = SelectedCategory.Name;
-            //Description = SelectedCategory.Description;
+            if (SelectedCategory == null)
+            {
+                return;
+            }
+            Name = SelectedCategory.Name;
+            Description = SelectedCategory.Description;
         }
         private void ClearTextBoxs()
         {

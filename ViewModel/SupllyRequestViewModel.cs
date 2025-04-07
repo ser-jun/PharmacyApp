@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace PharmacyApp.ViewModel
@@ -108,12 +109,17 @@ namespace PharmacyApp.ViewModel
         }
         private async Task UpdateItem()
         {
-            await _supplyRequestRepository.UpdateSupplyRequestItem(SelectedRequest, RequestedAmount, RequestDate, Status);
+            if (SelectedRequest == null) { MessageBox.Show("Заявка не выбрана"); return; }
+            if (RequestedAmount <= 0) { MessageBox.Show("Количество должно быть больше 0"); return; }
+            if (Status ==null) { MessageBox.Show("Выберите статус"); return; }
+            await _supplyRequestRepository.UpdateSupplyRequestItem(SelectedRequest, RequestedAmount, RequestDate, Status); 
             await LoadData();
         }
+
         private async Task DeleteItem()
         {
-            await _supplyRequestRepository.DeleteSupplyRequestItem(SelectedRequest);
+            if (SelectedRequest == null) { MessageBox.Show("Заявка не выбрана"); return; }
+            await _supplyRequestRepository.DeleteSupplyRequestItem(SelectedRequest); 
             await LoadData();
         }
         private void ClearFields()

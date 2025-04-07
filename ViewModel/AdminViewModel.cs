@@ -9,6 +9,7 @@ using System.Windows.Input;
 using PharmacyApp.Models;
 using System.Collections.ObjectModel;
 using PharmacyApp.View;
+using System.Windows;
 
 namespace PharmacyApp.ViewModel
 {
@@ -90,19 +91,25 @@ namespace PharmacyApp.ViewModel
         }
         private async Task DeleteUser()
         {
+            if (SelectedUser == null)
+            {
+                MessageBox.Show("Выберите элемент для удаления");
+                return;
+            }
            await _adminRepository.DeleteItemUser(SelectedUser.UserId);
             await LoadUsersInfo();
         }
         private async Task UpdateUser()
         {
+            if (string.IsNullOrWhiteSpace(Name)) { MessageBox.Show("Введите имя пользователя"); return; }
+            if (string.IsNullOrWhiteSpace(FullName)) { MessageBox.Show("Введите полное имя"); return; }
+            if (string.IsNullOrWhiteSpace(Phone)) { MessageBox.Show("Введите телефон"); return; }
+            if (SelectedUser == null) { MessageBox.Show("Пользователь не выбран"); return; }
+
             await _adminRepository.UpdateItemUser(Name, FullName, Phone, SelectedUser.UserId);
             await LoadUsersInfo();
         }
 
-        private void GoForwardWindow()
-        {
-
-        }
         private void GoMainWindow()
         {
             NavigationService.OpenWindow<AdminChooseWindow>();
