@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
 using PharmacyApp.Repositories.Interfaces;
+using PharmacyApp.Services;
 using PharmacyApp.View;
 using System;
 using System.Collections.Generic;
@@ -130,8 +131,24 @@ namespace PharmacyApp.ViewModel
 
         private async Task ExecuteEntry()
         {
+            if (string.IsNullOrWhiteSpace(UserName))
+            {
+                MessageBox.Show("Введите имя пользователя");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(Password))
+            {
+                MessageBox.Show("Введите пароль");
+                return;
+            }
+
             var user = await _userRepository.AuthenticateAsync(UserName, Password);
-            NavigationService.OpenWindow<MainMenu>();
+            if (user != null)
+            {
+                CurrentUser.Login(user);
+                NavigationService.OpenWindow<MainMenu>();
+            }
         }
 
         private async Task ExecuteRegister()

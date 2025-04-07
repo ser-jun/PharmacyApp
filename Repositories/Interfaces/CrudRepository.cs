@@ -1,10 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PharmacyApp.Models;
+using PharmacyApp.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace PharmacyApp.Repositories.Interfaces
 {
@@ -19,6 +21,7 @@ namespace PharmacyApp.Repositories.Interfaces
         }
         public async Task<T> AddAsync(T entity)
         {
+
             await _dbSet.AddAsync(entity);
             await _context.SaveChangesAsync();
             return entity;
@@ -27,12 +30,14 @@ namespace PharmacyApp.Repositories.Interfaces
         {
             _dbSet.Remove(entity);
             await _context.SaveChangesAsync();
+
         }
         public async Task<T> UpdateAsync(T entity)
         {
             _dbSet.Update(entity);
             await _context.SaveChangesAsync();
             return entity;
+
         }
         public async Task<IEnumerable<T>> GetAllAsync()
         {

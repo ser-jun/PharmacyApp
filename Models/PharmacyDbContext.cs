@@ -232,7 +232,7 @@ public partial class PharmacyDbContext : DbContext
 
             entity.HasOne(d => d.Medication).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.MedicationId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("orders_ibfk_2");
 
             entity.HasOne(d => d.Prescription).WithMany(p => p.Orders)

@@ -47,9 +47,16 @@ namespace PharmacyApp.Repositories
         }
         public async Task<User> AuthenticateAsync(string name, string password)
         {
-            var user = _context.Users.FirstOrDefault(u => u.Username == name);
+            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(password))
+            {
+                MessageBox.Show("Имя пользователя и пароль обязательны для заполнения");
+                return null;
+            }
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == name);
             if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
             {
+                MessageBox.Show("Неверное имя пользователя или пароль");
                 return null;
             }
 
