@@ -5,8 +5,60 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PharmacyApp.View"
         mc:Ignorable="d"
-        Title="Информация о неполученных заказах" Height="450" Width="800">
+        Title="Информация о неполученных заказах" Height="450" Width="800"
+        WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <Style x:Key="OrderButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#2196F3"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="BorderBrush" Value="#1976D2"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="5"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                BorderBrush="{TemplateBinding BorderBrush}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#1976D2"/>
+                    <Setter Property="Cursor" Value="Hand"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+      
+        <Style TargetType="ComboBox">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+
+        <Style TargetType="TextBlock">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+    </Window.Resources>
+
     <Grid Margin="10">
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#E3F2FD" Offset="0"/>
+                <GradientStop Color="#BBDEFB" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -14,11 +66,9 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
-            
             <ComboBox Width="200" Margin="0,0,10,0"
                      ItemsSource="{Binding StatusFilter}"
-                     SelectedItem="{Binding SelectedStatusFilter}"
-                    />
+                     SelectedItem="{Binding SelectedStatusFilter}"/>
 
             <ComboBox Width="200" Margin="0,0,10,0"
                      ItemsSource="{Binding MedicationCategories}"
@@ -28,13 +78,14 @@
 
             <Button Content="Применить фильтр" 
                     Command="{Binding ApplyFilterCommand}"
+                    Style="{StaticResource OrderButtonStyle}"
                     Width="120" Margin="0,0,10,0"/>
 
             <Button Content="Сбросить фильтр" 
                     Command="{Binding ResetFilterCommand}"
+                    Style="{StaticResource OrderButtonStyle}"
                     Width="120"/>
         </StackPanel>
-
 
         <DataGrid Grid.Row="1" 
                  ItemsSource="{Binding FilteredOrders}"

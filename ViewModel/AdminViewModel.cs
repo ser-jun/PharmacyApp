@@ -45,6 +45,10 @@ namespace PharmacyApp.ViewModel
             {
                 _selectedUser = value;
                 OnPropertyChanged(nameof(SelectedUser));
+                if (SelectedUser != null)
+                {
+                    FillTextBoxs();
+                }
             }
         }
         public ObservableCollection<User> Users
@@ -98,6 +102,7 @@ namespace PharmacyApp.ViewModel
             }
            await _adminRepository.DeleteItemUser(SelectedUser.UserId);
             await LoadUsersInfo();
+            ClearTextBoxs();
         }
         private async Task UpdateUser()
         {
@@ -108,8 +113,20 @@ namespace PharmacyApp.ViewModel
 
             await _adminRepository.UpdateItemUser(Name, FullName, Phone, SelectedUser.UserId);
             await LoadUsersInfo();
+            ClearTextBoxs();
         }
-
+        private void FillTextBoxs()
+        {
+            Name = SelectedUser.Username;
+            FullName=SelectedUser.FullName;
+            Phone = SelectedUser.ContactPhone;
+        }
+        private void ClearTextBoxs()
+        {
+            Name = null;
+            FullName = null;
+            Phone = null;
+        }
         private void GoMainWindow()
         {
             NavigationService.OpenWindow<AdminChooseWindow>();

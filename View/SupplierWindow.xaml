@@ -5,8 +5,97 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PharmacyApp.View"
         mc:Ignorable="d"
-        Title="Управление поставщиками" Height="500" Width="900">
+        Title="Управление поставщиками" 
+        Height="500" 
+        Width="900"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+ 
+        <Style x:Key="PharmacyButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#2196F3"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="8"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="BorderBrush" Value="#1976D2"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="4"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                BorderBrush="{TemplateBinding BorderBrush}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#1976D2"/>
+                    <Setter Property="Cursor" Value="Hand"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+   
+        <Style TargetType="GroupBox">
+            <Setter Property="Margin" Value="0,0,0,10"/>
+            <Setter Property="Padding" Value="8"/>
+            <Setter Property="BorderBrush" Value="#90A4AE"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Background" Value="#FAFAFA"/>
+        </Style>
+
+  
+        <Style TargetType="TextBlock">
+            <Setter Property="Margin" Value="0,0,0,5"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+
+    
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="0,0,0,5"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#BDBDBD"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+ 
+        <Style TargetType="ComboBox">
+            <Setter Property="Margin" Value="0,0,0,5"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#BDBDBD"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+  
+        <Style TargetType="DataGrid">
+            <Setter Property="Margin" Value="0,0,0,10"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#BDBDBD"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="RowBackground" Value="White"/>
+            <Setter Property="AlternatingRowBackground" Value="#F5F5F5"/>
+        </Style>
+    </Window.Resources>
+
     <Grid Margin="10">
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#E3F2FD" Offset="0"/>
+                <GradientStop Color="#BBDEFB" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -29,7 +118,7 @@
 
                     <TextBlock Text="Телефон:"/>
                     <TextBox Text="{Binding Phone, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,5"/>
-                    
+
                     <TextBlock Text="Среднее время доставки:"/>
                     <TextBox Text="{Binding DeliveryTimeDays, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,5"/>
                 </StackPanel>
@@ -77,18 +166,17 @@
                 <DataGridTextColumn Header="Рейтинг" Binding="{Binding Rating}" Width="Auto"/>
                 <DataGridTextColumn Header="Почта" Binding="{Binding Email}" Width="Auto"/>
                 <DataGridTextColumn Header="Компоненты" Binding="{Binding ComponentName}" Width="*"/>
-
             </DataGrid.Columns>
         </DataGrid>
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
             <TextBox Text="{Binding SearchFiled, UpdateSourceTrigger=PropertyChanged}" Width="100" Margin="0,5,5,0"/>
-            <Button Content="В меню" Command="{Binding GoBackCommand}" Width="100" Margin="5"/>
-            <Button Content="Фильтр по рейтингу или компоненту" Command="{Binding ApplyFilter}" Width="100" Margin="5"/>
-            <Button Content="Добавить" Command="{Binding AddCommand}" Width="100" Margin="5"/>
-            <Button Content="Редактировать" Command="{Binding UpdateCommand}" Width="100" Margin="5"/>
-            <Button Content="Удалить" Command="{Binding DeleteCommand}" Width="100" Margin="5"/>
-            <Button Content="Очистить" Command="{Binding ClearCommand}" Width="100" Margin="5"/>
+            <Button Content="В меню" Command="{Binding GoBackCommand}" Width="100" Margin="5" Style="{StaticResource PharmacyButtonStyle}"/>
+            <Button Content="Фильтр по рейтингу или компоненту" Command="{Binding ApplyFilter}" Width="100" Margin="5" Style="{StaticResource PharmacyButtonStyle}"/>
+            <Button Content="Добавить" Command="{Binding AddCommand}" Width="100" Margin="5" Style="{StaticResource PharmacyButtonStyle}"/>
+            <Button Content="Редактировать" Command="{Binding UpdateCommand}" Width="100" Margin="5" Style="{StaticResource PharmacyButtonStyle}"/>
+            <Button Content="Удалить" Command="{Binding DeleteCommand}" Width="100" Margin="5" Style="{StaticResource PharmacyButtonStyle}"/>
+            <Button Content="Очистить" Command="{Binding ClearCommand}" Width="100" Margin="5" Style="{StaticResource PharmacyButtonStyle}"/>
         </StackPanel>
     </Grid>
 </Window>

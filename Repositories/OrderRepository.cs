@@ -191,7 +191,7 @@ namespace PharmacyApp.Repositories
                 if (medications.TryGetValue(order.MedicationId, out var medication))
                     order.Medication = medication;
 
-                if (registrars.TryGetValue(order.RegistrarId, out var registrar))
+                if (registrars.TryGetValue(order.RegistrarId??0, out var registrar))
                     order.Registrar = registrar;
 
                 if (pendingOrdersDict.TryGetValue(order.OrderId, out var pendingForOrder))

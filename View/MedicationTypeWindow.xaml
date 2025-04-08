@@ -6,26 +6,109 @@
         xmlns:local="clr-namespace:PharmacyApp.View"
         mc:Ignorable="d"
         Title="Управление типами лекарств" 
-        Height="400" 
-        Width="800"
+        Height="450" 
+        Width="850"
         WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <!-- Основной стиль кнопок -->
+        <Style x:Key="OrderButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#2196F3"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="BorderBrush" Value="#1976D2"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="5"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                BorderBrush="{TemplateBinding BorderBrush}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#1976D2"/>
+                    <Setter Property="Cursor" Value="Hand"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Стиль для GroupBox -->
+        <Style TargetType="GroupBox">
+            <Setter Property="Margin" Value="0,10,0,0"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="BorderBrush" Value="#90A4AE"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+
+        <!-- Стиль для TextBlock -->
+        <Style TargetType="TextBlock">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+
+        <!-- Стиль для TextBox и ComboBox -->
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+
+        <Style TargetType="ComboBox">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+    </Window.Resources>
+
     <Grid Margin="10">
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#E3F2FD" Offset="0"/>
+                <GradientStop Color="#BBDEFB" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-   
-        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 0 10">
-            <Button Content="В меню" Width="100" Margin="5" Command="{Binding GoMenuCommand}"/>
-            <Button Content="Добавить" Width="100" Margin="5" Command="{Binding AddTypeCommand}"/>
-            <Button Content="Редактировать" Width="100" Margin="5" Command="{Binding EditTypeCommand}"/>
-            <Button Content="Удалить" Width="100" Margin="5" Command="{Binding DeleteTypeCommand}"/>
-            <Button Content="Очистить" Width="100" Margin="5" Command="{Binding ClearFormCommand}"/>
+        <!-- Панель кнопок -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,10">
+            <Button Content="В меню" 
+                    Width="120" 
+                    Command="{Binding GoMenuCommand}"
+                    Style="{StaticResource OrderButtonStyle}"/>
+            <Button Content="Добавить" 
+                    Width="120" 
+                    Command="{Binding AddTypeCommand}"
+                    Style="{StaticResource OrderButtonStyle}"/>
+            <Button Content="Редактировать" 
+                    Width="120" 
+                    Command="{Binding EditTypeCommand}"
+                    Style="{StaticResource OrderButtonStyle}"/>
+            <Button Content="Удалить" 
+                    Width="120" 
+                    Command="{Binding DeleteTypeCommand}"
+                    Style="{StaticResource OrderButtonStyle}"/>
+            <Button Content="Очистить" 
+                    Width="120" 
+                    Command="{Binding ClearFormCommand}"
+                    Style="{StaticResource OrderButtonStyle}"/>
         </StackPanel>
 
-
+        <!-- Таблица типов лекарств -->
         <DataGrid Grid.Row="1" 
                   ItemsSource="{Binding MedicationTypes}"
                   SelectedItem="{Binding SelectedType}"
@@ -40,8 +123,8 @@
             </DataGrid.Columns>
         </DataGrid>
 
-
-        <GroupBox Grid.Row="2" Header="Данные типа лекарства" Margin="0 10 0 0">
+        <!-- Форма редактирования -->
+        <GroupBox Grid.Row="2" Header="Данные типа лекарства">
             <Grid Margin="5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -54,18 +137,16 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <TextBlock Grid.Row="0" Grid.Column="0" Text="Название:" Margin="5" VerticalAlignment="Center"/>
+                <TextBlock Text="Название:" 
+                           Grid.Row="0" Grid.Column="0"/>
                 <TextBox Grid.Row="0" Grid.Column="1" 
-                         Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" 
-                         Margin="5"/>
+                         Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
 
-                <TextBlock Grid.Row="0" Grid.Column="2" Text="Способ применения:" Margin="5" VerticalAlignment="Center"/>
+                <TextBlock Text="Способ применения:" 
+                           Grid.Row="0" Grid.Column="2"/>
                 <ComboBox Grid.Row="0" Grid.Column="3" 
                           ItemsSource="{Binding ApplicationMethods}"
-                          SelectedItem="{Binding SelectedApplicationMethod}"
-                          Margin="5"/>
-
-           
+                          SelectedItem="{Binding SelectedApplicationMethod}"/>
             </Grid>
         </GroupBox>
     </Grid>

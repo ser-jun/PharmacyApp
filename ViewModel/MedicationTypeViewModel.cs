@@ -89,6 +89,7 @@ namespace PharmacyApp.ViewModel
             if (string.IsNullOrWhiteSpace(Name)) { MessageBox.Show("Введите название типа"); return; }
             if (SelectedApplicationMethod == null) { MessageBox.Show("Выберите метод применения"); return; }
             await _medicationTypesRepository.AddTypeItem(Name, SelectedApplicationMethod); await LoadData();
+            ClearTextBoxs();
         }
 
         private async Task DeleteType()
@@ -103,6 +104,7 @@ namespace PharmacyApp.ViewModel
             if (string.IsNullOrWhiteSpace(Name)) { MessageBox.Show("Введите название типа"); return; }
             if (SelectedApplicationMethod == null) { MessageBox.Show("Выберите метод применения"); return; }
             await _medicationTypesRepository.UpdateTypeItem(SelectedType, Name, SelectedApplicationMethod); await LoadData();
+            ClearTextBoxs();
         }
         private void FillTextBoxs()
         {

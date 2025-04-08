@@ -1,47 +1,90 @@
 ﻿<Window x:Class="PharmacyApp.View.AddMedicationWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
         Title="Добавить лекарство" 
         Height="540" 
         Width="450"
         WindowStartupLocation="CenterScreen">
-    <Grid Margin="10">
-        <StackPanel>
-            <TextBlock Text="Название:" Margin="0,0,0,5"/>
-            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
 
-            <TextBlock Text="Тип:" Margin="0,0,0,5"/>
+    <Window.Resources>
+
+        <Style x:Key="MenuButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#2196F3"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="8"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="5"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#1976D2"/>
+                    <Setter Property="Cursor" Value="Hand"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+  
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#E3F2FD" Offset="0"/>
+                <GradientStop Color="#BBDEFB" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <StackPanel Margin="10">
+            <TextBlock Text="Название:" Margin="0,0,0,5" Foreground="#0D47A1" FontWeight="SemiBold"/>
+            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" Background="#E3F2FD" BorderBrush="#90CAF9"/>
+
+            <TextBlock Text="Тип:" Margin="0,0,0,5" Foreground="#0D47A1" FontWeight="SemiBold"/>
             <ComboBox ItemsSource="{Binding MedicationTypes}"
                       SelectedItem="{Binding SelectedType}"
                       DisplayMemberPath="Name"
-                      Margin="0,0,0,10"/>
+                      Margin="0,0,0,10" Background="#E3F2FD" BorderBrush="#90CAF9"/>
 
-            <TextBlock Text="Категория:" Margin="0,0,0,5"/>
+            <TextBlock Text="Категория:" Margin="0,0,0,5" Foreground="#0D47A1" FontWeight="SemiBold"/>
             <ComboBox ItemsSource="{Binding MedicationCategories}"
                       SelectedItem="{Binding SelectedCategory}"
                       DisplayMemberPath="Name"
-                      Margin="0,0,0,10"/>
+                      Margin="0,0,0,10" Background="#E3F2FD" BorderBrush="#90CAF9"/>
 
-            <CheckBox  IsChecked="{Binding IsReadyMade}"
+            <CheckBox IsChecked="{Binding IsReadyMade}"
                       Content="Готовая форма"
-                      Margin="0,0,0,10"/>
+                      Margin="0,0,0,10" Foreground="#0D47A1"/>
 
-            <TextBlock Text="Цена:" Margin="0,0,0,5"/>
-            <TextBox Text="{Binding Price, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,20"/>
-            <GroupBox Header="Компоненты" Margin="0,0,0,10">
+            <TextBlock Text="Цена:" Margin="0,0,0,5" Foreground="#0D47A1" FontWeight="SemiBold"/>
+            <TextBox Text="{Binding Price, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,20" Background="#E3F2FD" BorderBrush="#90CAF9"/>
+
+            <GroupBox Header="Компоненты" Margin="0,0,0,10" Foreground="#0D47A1" FontWeight="SemiBold" BorderBrush="#90CAF9" Background="#E3F2FD">
                 <StackPanel>
- 
                     <ListView ItemsSource="{Binding AllComponents}" 
-                                  Height="150"
-                                  ScrollViewer.VerticalScrollBarVisibility="Auto">
+                              Height="150"
+                              ScrollViewer.VerticalScrollBarVisibility="Auto"
+                              BorderThickness="0"
+                              Background="Transparent">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <CheckBox Content="{Binding Name}"
-                             IsChecked="{Binding IsSelected, Mode=TwoWay}"
-                             Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}, 
-                                      Path=DataContext.ToggleComponentCommand}"
-                             CommandParameter="{Binding}"
-                             Margin="2"/>
+                                          IsChecked="{Binding IsSelected, Mode=TwoWay}"
+                                          Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}, 
+                                                  Path=DataContext.ToggleComponentCommand}"
+                                          CommandParameter="{Binding}"
+                                          Margin="2" Foreground="#0D47A1"/>
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
@@ -53,20 +96,23 @@
                         </Grid.ColumnDefinitions>
 
                         <ComboBox Grid.Column="0" 
-                                      ItemsSource="{Binding SelectedComponents}"
-                                      DisplayMemberPath="Name"
-                                      SelectedItem="{Binding SelectedComponent}"
-                                      Margin="0,0,5,0"/>
+                                  ItemsSource="{Binding SelectedComponents}"
+                                  DisplayMemberPath="Name"
+                                  SelectedItem="{Binding SelectedComponent}"
+                                  Margin="0,0,5,0" Background="#E3F2FD" BorderBrush="#90CAF9"/>
 
                         <TextBox Grid.Column="1" 
-                                     Text="{Binding SelectedComponentAmount, UpdateSourceTrigger=PropertyChanged}"
-                                     Margin="5,0,0,0"/>
+                                 Text="{Binding SelectedComponentAmount, UpdateSourceTrigger=PropertyChanged}"
+                                 Margin="5,0,0,0" Background="#E3F2FD" BorderBrush="#90CAF9"/>
                     </Grid>
                 </StackPanel>
             </GroupBox>
 
-
-            <Button Command="{Binding ActionCommand}" Content="{Binding ActionButtonText}" Width="100" HorizontalAlignment="Right"/>
+            <Button Command="{Binding ActionCommand}" 
+                    Content="{Binding ActionButtonText}" 
+                    Style="{StaticResource MenuButtonStyle}" 
+                    Width="100" 
+                    HorizontalAlignment="Right"/>
         </StackPanel>
     </Grid>
 </Window>

@@ -5,17 +5,90 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PharmacyApp.View"
         mc:Ignorable="d"
-        Title="Склад" Height="450" Width="800"
+        Title="Склад" Height="450" Width="820"
         WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+ 
+        <Style x:Key="OrderButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#2196F3"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="BorderBrush" Value="#1976D2"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="5"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                BorderBrush="{TemplateBinding BorderBrush}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#1976D2"/>
+                    <Setter Property="Cursor" Value="Hand"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+     
+        <Style TargetType="GroupBox">
+            <Setter Property="Margin" Value="0,0,0,10"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="BorderBrush" Value="#90A4AE"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+
+ 
+        <Style TargetType="TextBlock">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+
+ 
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+
+        <Style TargetType="DatePicker">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+
+ 
+        <Style x:Key="SearchTextBoxStyle" TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+            <Setter Property="Width" Value="200"/>
+            <Setter Property="Margin" Value="0,0,10,0"/>
+            <Setter Property="Padding" Value="5"/>
+        </Style>
+    </Window.Resources>
+
     <Grid Margin="10">
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#E3F2FD" Offset="0"/>
+                <GradientStop Color="#BBDEFB" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-
-        <GroupBox Grid.Row="0" Header="Данные запасов" Margin="0 0 0 10">
+        <GroupBox Grid.Row="0" Header="Данные запасов">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -29,35 +102,43 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <TextBlock Grid.Row="0" Grid.Column="0" Text="Название:" Margin="5" VerticalAlignment="Center"/>
-                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding ComponentName}" Margin="5" />
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Название:"/>
+                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding ComponentName}"/>
 
-                <TextBlock Grid.Row="0" Grid.Column="2" Text="Единица измерения:" Margin="5" VerticalAlignment="Center"/>
-                <TextBox Grid.Row="0" Grid.Column="3" Text="{Binding UnitOfMeasure}" Margin="5"/>
+                <TextBlock Grid.Row="0" Grid.Column="2" Text="Единица измерения:"/>
+                <TextBox Grid.Row="0" Grid.Column="3" Text="{Binding UnitOfMeasure}"/>
 
-                <TextBlock Grid.Row="1" Grid.Column="0" Text="Количество:" Margin="5" VerticalAlignment="Center"/>
-                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Amount}" Margin="5"/>
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="Количество:"/>
+                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Amount}"/>
 
-                <TextBlock Grid.Row="1" Grid.Column="2" Text="Крит. норма:" Margin="5" VerticalAlignment="Center"/>
-                <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding CriticalNorm}" Margin="5" />
+                <TextBlock Grid.Row="1" Grid.Column="2" Text="Крит. норма:"/>
+                <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding CriticalNorm}"/>
 
-                <TextBlock Grid.Row="2" Grid.Column="0" Text="Дата поступления:" Margin="5" VerticalAlignment="Center"/>
-                <DatePicker Grid.Row="2" Grid.Column="1" SelectedDate="{Binding ArrivalDate}" Margin="5"/>
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Дата поступления:"/>
+                <DatePicker Grid.Row="2" Grid.Column="1" SelectedDate="{Binding ArrivalDate}"/>
 
-                <TextBlock Grid.Row="2" Grid.Column="2" Text="Срок годности (дни):" Margin="5" VerticalAlignment="Center"/>
-                <TextBox Grid.Row="2" Grid.Column="3" Text="{Binding ShelfLife}" Margin="5"/>
+                <TextBlock Grid.Row="2" Grid.Column="2" Text="Срок годности (дни):"/>
+                <TextBox Grid.Row="2" Grid.Column="3" Text="{Binding ShelfLife}"/>
             </Grid>
         </GroupBox>
 
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 0 10">
-            <TextBox Grid.Row="2" Grid.Column="3" Text="{Binding SearchName, UpdateSourceTrigger=PropertyChanged}" Width="100" Margin="0"/>
-            <Button Content="На главную" Command="{Binding GoMainMenuCommand}" Width="100" Margin="0"/>
-            <Button Content="Истекший срок годности" Command="{Binding ApllyExpiredComponentsCommand}" Width="100" Margin="5"/>
-            <Button Content="По Сроку годности" Command="{Binding ApplyFilterCommand}" Width="100" Margin="5"/>
-            <Button Content="Добавить" Command="{Binding AddCommand}" Width="100" Margin="5"/>
-            <Button Content="Изменить" Command="{Binding UpdateCommand}" Width="100" Margin="5"/>
-            <Button Content="Удалить" Command="{Binding DeleteCommand}" Width="100" Margin="5"/>
-            <Button Content="Очистить" Command="{Binding ClearCommand}" Width="100" Margin="5"/>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,10">
+            <TextBox Text="{Binding SearchName, UpdateSourceTrigger=PropertyChanged}" 
+                     Style="{StaticResource SearchTextBoxStyle}"/>
+            <Button Content="На главную" Command="{Binding GoMainMenuCommand}" 
+                    Style="{StaticResource OrderButtonStyle}" Width="100"/>
+            <Button Content="Истекший срок" Command="{Binding ApllyExpiredComponentsCommand}" 
+                    Style="{StaticResource OrderButtonStyle}" Width="110"/>
+            <Button Content="По сроку годности" Command="{Binding ApplyFilterCommand}" 
+                    Style="{StaticResource OrderButtonStyle}" Width="120"/>
+            <Button Content="Добавить" Command="{Binding AddCommand}" 
+                    Style="{StaticResource OrderButtonStyle}" Width="100"/>
+            <Button Content="Изменить" Command="{Binding UpdateCommand}" 
+                    Style="{StaticResource OrderButtonStyle}" Width="100"/>
+            <Button Content="Удалить" Command="{Binding DeleteCommand}" 
+                    Style="{StaticResource OrderButtonStyle}" Width="100"/>
+            <Button Content="Очистить" Command="{Binding ClearCommand}" 
+                    Style="{StaticResource OrderButtonStyle}" Width="100"/>
         </StackPanel>
 
         <DataGrid Grid.Row="2" 

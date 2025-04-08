@@ -6,28 +6,88 @@
         xmlns:local="clr-namespace:PharmacyApp.View"
         mc:Ignorable="d"
         Title="Недостающие компоненты" 
-        Height="300" 
-        Width="400"
+        Height="400" 
+        Width="600"
         WindowStartupLocation="CenterOwner">
+    <Window.Resources>
+
+        <Style x:Key="ActionButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#2196F3"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="BorderBrush" Value="#1976D2"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="5"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                BorderBrush="{TemplateBinding BorderBrush}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#1976D2"/>
+                    <Setter Property="Cursor" Value="Hand"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="DataGridStyle" TargetType="DataGrid">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#BBDEFB"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="AlternatingRowBackground" Value="#E3F2FD"/>
+            <Setter Property="RowBackground" Value="White"/>
+            <Setter Property="HorizontalGridLinesBrush" Value="#CFD8DC"/>
+            <Setter Property="VerticalGridLinesBrush" Value="#CFD8DC"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+            <Setter Property="SelectionMode" Value="Single"/>
+            <Setter Property="SelectionUnit" Value="FullRow"/>
+        </Style>
+    </Window.Resources>
+
     <Grid Margin="10">
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#E3F2FD" Offset="0"/>
+                <GradientStop Color="#BBDEFB" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <DataGrid Grid.Row="1" 
-                  ItemsSource="{Binding PendingOrders}"
-                  AutoGenerateColumns="False"
-                  IsReadOnly="True"
-                  SelectionMode="Single"
-                  SelectionUnit="FullRow">
-            <DataGrid.Columns>
 
+        <TextBlock Grid.Row="0" 
+                   Text="Управление недостающими компонентами" 
+                   FontSize="20" 
+                   FontWeight="Bold" 
+                   Foreground="#0D47A1"
+                   HorizontalAlignment="Center" 
+                   Margin="0,10,0,10"/>
+
+        <DataGrid Grid.Row="1" 
+                  Style="{StaticResource DataGridStyle}"
+                  ItemsSource="{Binding PendingOrders}"
+                  IsReadOnly="True">
+            <DataGrid.Columns>
                 <DataGridTextColumn Header="Компонент" Binding="{Binding Component.Name}" Width="*"/>
                 <DataGridTextColumn Header="Требуемое количество" 
-                                  Binding="{Binding RequiredAmount, StringFormat={}{0:N3}}" 
-                                  Width="*"/>
+                                    Binding="{Binding RequiredAmount, StringFormat={}{0:N3}}" 
+                                    Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
 

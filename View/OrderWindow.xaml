@@ -5,8 +5,48 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PharmacyApp.View"
         mc:Ignorable="d"
-        Title="Управление заказами" Height="600" Width="900">
+        Title="Управление заказами" Height="600" Width="900"
+        WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <!-- Button Style -->
+        <Style x:Key="OrderButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#2196F3"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="BorderBrush" Value="#1976D2"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="5"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                BorderBrush="{TemplateBinding BorderBrush}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#1976D2"/>
+                    <Setter Property="Cursor" Value="Hand"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
     <Grid Margin="10">
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#E3F2FD" Offset="0"/>
+                <GradientStop Color="#BBDEFB" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -14,7 +54,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-
+        <!-- Order Details Section -->
         <GroupBox Grid.Row="0" Header="Данные заказа" Margin="0,0,0,10" Padding="10">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -37,12 +77,10 @@
                           ItemsSource="{Binding Prescriptions}"
                           DisplayMemberPath="Diagnosis"
                           SelectedValue="{Binding SelectedPrescription}"/>
-
                 <ComboBox Grid.Row="1" Grid.Column="1" Margin="5,0,5,5"
                           ItemsSource="{Binding Medications}"
                           DisplayMemberPath="Name"
                           SelectedValue="{Binding SelectedMedication}"/>
-
                 <ComboBox Grid.Row="1" Grid.Column="2" Margin="5,0,0,5"
                           ItemsSource="{Binding OrderStatuses}"
                           SelectedItem="{Binding Status}"/>
@@ -53,10 +91,8 @@
 
                 <TextBox Grid.Row="3" Grid.Column="0" Margin="0,0,5,0"
                          Text="{Binding Amount}" VerticalAlignment="Center"/>
-
                 <TextBox Grid.Row="3" Grid.Column="1" Margin="5,0,5,0"
                          Text="{Binding Price}" VerticalAlignment="Center"/>
-
                 <ComboBox Grid.Row="3" Grid.Column="2" Margin="5,0,0,0"
                           ItemsSource="{Binding Registrars}"
                           DisplayMemberPath="FullName"
@@ -65,7 +101,7 @@
             </Grid>
         </GroupBox>
 
-
+        <!-- Missing Components Section -->
         <GroupBox Grid.Row="1" Header="Недостающие компоненты" Margin="0,0,0,10">
             <GroupBox.Style>
                 <Style TargetType="GroupBox">
@@ -77,7 +113,6 @@
                     </Style.Triggers>
                 </Style>
             </GroupBox.Style>
-
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -90,24 +125,18 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-
-    
                 <TextBlock Grid.Column="0" Text="Компонент:" VerticalAlignment="Center" Margin="0,0,5,0"/>
                 <TextBlock Grid.Column="2" Text="Количество:" VerticalAlignment="Center" Margin="5,0,5,0"/>
-
-
                 <ComboBox Grid.Column="1" Margin="0,0,5,0"
-                         ItemsSource="{Binding Components}"
-                         DisplayMemberPath="Name"
-                         SelectedItem="{Binding SelectedComponent}"/>
-
+                          ItemsSource="{Binding Components}"
+                          DisplayMemberPath="Name"
+                          SelectedItem="{Binding SelectedComponent}"/>
                 <TextBox Grid.Column="3" Margin="5,0,5,0"
-                        Text="{Binding ComponentAmount}"/>
-
+                         Text="{Binding ComponentAmount}"/>
             </Grid>
         </GroupBox>
 
-
+        <!-- Orders DataGrid -->
         <DataGrid Grid.Row="2" ItemsSource="{Binding Orders}" 
                   SelectedItem="{Binding SelectedOrder}"
                   AutoGenerateColumns="False" 
@@ -124,17 +153,24 @@
             </DataGrid.Columns>
         </DataGrid>
 
-
-        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
-            
-            <Button Content="На главную" Command="{Binding GoMainWindowCommand}" Width="100" Margin="0,0,0,0"/>
-            <Button Content="Заказы в производстве" Command="{Binding ApplyFilterCommand}" Width="100" Margin="0,0,10,0"/>
-            <Button Content="Инфорамция о покупателях" Command="{Binding OpenUncalmedWindowCommand}" Width="100" Margin="0,0,10,0"/>
-            <Button Content="Ожидание компонентов" Command="{Binding OpenPendingOrderComponent}" Width="100" Margin="0,0,10,0"/>
-            <Button Content="Добавить" Command="{Binding AddCommand}" Width="100" Margin="0,0,10,0"/>
-            <Button Content="Редактировать" Command="{Binding UpdateCommand}" Width="100" Margin="0,0,10,0"/>
-            <Button Content="Удалить" Command="{Binding DeleteCommand}" Width="100" Margin="0,0,10,0"/>
-            <Button Content="Очистить" Command="{Binding ClearCommand}" Width="100"/>
-        </StackPanel>
+        <!-- Action Buttons -->
+        <Grid Grid.Row="3" Margin="0,10,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,10">
+                <Button Content="На главную" Style="{StaticResource OrderButtonStyle}" Command="{Binding GoMainWindowCommand}" Width="120" Margin="0,0,10,0"/>
+                <Button Content="Заказы в производстве" Style="{StaticResource OrderButtonStyle}" Command="{Binding ApplyFilterCommand}" Width="157" Margin="0,0,10,0"/>
+                <Button Content="Инфорамция о покупателях" Style="{StaticResource OrderButtonStyle}" Command="{Binding OpenUncalmedWindowCommand}" Width="190" Margin="0,0,10,0"/>
+                <Button Content="Ожидание компонентов" Style="{StaticResource OrderButtonStyle}" Command="{Binding OpenPendingOrderComponent}" Width="170" Margin="0,0,10,0"/>
+            </StackPanel>
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Добавить" Style="{StaticResource OrderButtonStyle}" Command="{Binding AddCommand}" Width="100" Margin="0,0,10,0"/>
+                <Button Content="Редактировать" Style="{StaticResource OrderButtonStyle}" Command="{Binding UpdateCommand}" Width="100" Margin="0,0,10,0"/>
+                <Button Content="Удалить" Style="{StaticResource OrderButtonStyle}" Command="{Binding DeleteCommand}" Width="100" Margin="0,0,10,0"/>
+                <Button Content="Очистить" Style="{StaticResource OrderButtonStyle}" Command="{Binding ClearCommand}" Width="100"/>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Window>

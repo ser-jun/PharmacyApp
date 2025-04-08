@@ -50,8 +50,8 @@ namespace PharmacyApp.ViewModel
         {
             _orderRepository = orderRepository;
             _loadMethods = orderLoadsMethods;
-            _ = Initialize();
-            OrderDate = DateTime.Now;
+            Initialize().ConfigureAwait(false); 
+                    OrderDate = DateTime.Now;
             OrderStatuses = new ObservableCollection<string>
             {
                 "Ожидает обработки",
@@ -249,20 +249,27 @@ namespace PharmacyApp.ViewModel
         }
         private async Task LoadData()
         {
-            var orderData = await _orderRepository.LoadOrdersInfo();
-            var medicationData = await _loadMethods.LoadMedicatonInfo();
-            var userData = (await _loadMethods.LoadUserInfo()).Where(c => c.Role == ROLE_PHARMACIST);
-            var prescriptionData = await _loadMethods.LoadPrescriptionInfo();
-            var componentsData = await _loadMethods.LoadComponentInfo();
-            
-            Application.Current.Dispatcher.Invoke(() =>
+            try
             {
-                Orders = new ObservableCollection<Order>(orderData);
-                Prescriptions = new ObservableCollection<Prescription>(prescriptionData);
-                Medications = new ObservableCollection<Medication>(medicationData);
-                Registrars = new ObservableCollection<User>(userData);
-                Components = new ObservableCollection<Models.Component>(componentsData);
-            });
+                var orderData = await _orderRepository.LoadOrdersInfo();
+                var medicationData = await _loadMethods.LoadMedicatonInfo();
+                var userData = (await _loadMethods.LoadUserInfo()).Where(c => c.Role == ROLE_PHARMACIST);
+                var prescriptionData = await _loadMethods.LoadPrescriptionInfo();
+                var componentsData = await _loadMethods.LoadComponentInfo();
+
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    Orders = new ObservableCollection<Order>(orderData);
+                    Prescriptions = new ObservableCollection<Prescription>(prescriptionData);
+                    Medications = new ObservableCollection<Medication>(medicationData);
+                    Registrars = new ObservableCollection<User>(userData);
+                    Components = new ObservableCollection<Models.Component>(componentsData);
+                });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка загрузки данных: {ex.Message}");
+            }
         }
         private async Task LoadPendingOrder()
         {

@@ -15,7 +15,7 @@ public partial class Order
 
     public decimal Amount { get; set; }
 
-    public int RegistrarId { get; set; }
+    public int? RegistrarId { get; set; }
 
     public DateTime? OrderDate { get; set; }
 
