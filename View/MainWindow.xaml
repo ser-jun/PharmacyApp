@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PharmacyApp"
         mc:Ignorable="d"
         Title="Аптека - Авторизация" 
         Height="500" 
@@ -17,6 +18,15 @@
         </Style>
 
         <Style x:Key="FormInputStyle" TargetType="TextBox">
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Margin" Value="0,0,0,10"/>
+            <Setter Property="Background" Value="#E3F2FD"/>
+            <Setter Property="BorderBrush" Value="#90CAF9"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <Style x:Key="FormPasswordBoxStyle" TargetType="PasswordBox">
             <Setter Property="Height" Value="30"/>
             <Setter Property="Padding" Value="5"/>
             <Setter Property="Margin" Value="0,0,0,10"/>
@@ -74,7 +84,6 @@
         </Grid.Background>
 
         <TabControl BorderBrush="#90CAF9">
-            <!-- Вкладка входа -->
             <TabItem Header="Вход" Style="{StaticResource TabItemStyle}">
                 <StackPanel Margin="20">
                     <TextBlock Text="Имя пользователя:" Style="{StaticResource FormLabelStyle}"/>
@@ -82,15 +91,16 @@
                              Style="{StaticResource FormInputStyle}"/>
 
                     <TextBlock Text="Пароль:" Style="{StaticResource FormLabelStyle}"/>
-                    <TextBox Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}" 
-                             Style="{StaticResource FormInputStyle}"/>
+                    <PasswordBox x:Name="LoginPasswordBox" 
+                                local:PasswordBoxAssistant.BindPassword="True"
+                                local:PasswordBoxAssistant.BoundPassword="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Style="{StaticResource FormPasswordBoxStyle}"/>
 
                     <Button Command="{Binding EntryCommand}" Content="Войти" 
                             Style="{StaticResource FormButtonStyle}"/>
                 </StackPanel>
             </TabItem>
 
-            <!-- Вкладка регистрации -->
             <TabItem Header="Регистрация" Style="{StaticResource TabItemStyle}">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <StackPanel Margin="20">
@@ -103,8 +113,10 @@
                                  Style="{StaticResource FormInputStyle}"/>
 
                         <TextBlock Text="Пароль:" Style="{StaticResource FormLabelStyle}"/>
-                        <TextBox Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}" 
-                                 Style="{StaticResource FormInputStyle}"/>
+                        <PasswordBox x:Name="RegisterPasswordBox"
+                                    local:PasswordBoxAssistant.BindPassword="True"
+                                    local:PasswordBoxAssistant.BoundPassword="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    Style="{StaticResource FormPasswordBoxStyle}"/>
 
                         <TextBlock Text="Роль:" Style="{StaticResource FormLabelStyle}"/>
                         <ComboBox ItemsSource="{Binding DisplayRoles}"
